@@ -129,7 +129,7 @@ namespace SudokuMaster.Processor
                 if (word.Length >= KeyLength)
                 {
                     var keys = new List<String>();
-                    for (int i = 0; i < word.Length - KeyLength; i++)
+                    for (int i = 0; i <= word.Length - KeyLength; i++)
                     {
                         var key = word.Substring(i, KeyLength);
                         if (keys.Contains(key) == false)
@@ -209,18 +209,16 @@ namespace SudokuMaster.Processor
             var ways = GetStartWays(start);
             if (ways.Count == 0)
                 return null;
-            var result = ways.FirstOrDefault(way => (ShortWordsContainer.Contains(way.Text) && (Used.Contains(way.Text) == false))
-                || (ShortWordsContainer.Contains(way.Reverse) && (Used.Contains(way.Reverse) == false)));
+            Way result = null;
 
             for (int i = 0; i < KeyLength - 2; i++)
             {
-                ways = ExtendLastWays(ways);
                 foreach (var way in ways.Where(way => (ShortWordsContainer.Contains(way.Text) && (Used.Contains(way.Text) == false))
-                || (ShortWordsContainer.Contains(way.Reverse) && (Used.Contains(way.Reverse) == false))))
+                   || (ShortWordsContainer.Contains(way.Reverse) && (Used.Contains(way.Reverse) == false))))
                 {
                     result = way;
-                    break;
                 }
+                ways = ExtendLastWays(ways);
             }
             //Initialize start dictionaries
             foreach (var way in ways)
