@@ -16,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using SudokuMaster.Tools;
 
 namespace SudokuMaster
 {
@@ -44,6 +43,9 @@ namespace SudokuMaster
         private TimeSpan gameTimeElapsed;
 		private Cell[][] cells;
         private char[,] chars;
+        private int pScore = 0;
+        private int cScore = 0;
+        public List<string> usedWords = new List<string>();
         private bool containsNewLetter = false;
         private BaldaProcessor bProc = BaldaProcessor.Instance;
         private struct Coords
@@ -355,20 +357,30 @@ namespace SudokuMaster
             {
                 string finalWord = word;
                 word = "";
-                if (bProc.IsWord(finalWord) && containsNewLetter)
+                if (bProc.IsWord(finalWord) && containsNewLetter && !usedWords.Contains(finalWord))
                 {
                     letterPicked = false;
                     started = false;
                     playerTextBox.Text = finalWord;
+                    pScore += finalWord.Length;
+                    playerScore.Text = pScore.ToString();
                     foreach (var x in listOfCoords)
                     {
                         x.BackgroundImage.Source = lightImage;
                     }
+                    usedWords.Add(finalWord);
+
+                    //вынести в отдельную функцию
                     for (int i = 0; i < 7; i++)
                         for (int j = 0; j < 7; j++)
                             chars[i, j] = (char)cells[i][j].Value;
-                    Way way = bProc.Process(chars, new List<string>());
+                    Way way = bProc.Process(chars, usedWords);
                     Field field = way.GetStartField();
+                    string compWord = way.Word;
+                    usedWords.Add(compWord);
+                    computerTextBOx.Text = compWord;
+                    cScore += compWord.Length;
+                    compScore.Text = cScore.ToString();
                     cells[field.X][field.Y].Value = field.Value;
                     containsNewLetter = false;
                     

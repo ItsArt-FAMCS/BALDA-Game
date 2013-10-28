@@ -117,6 +117,9 @@
         </Grid>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Балда" VerticalAlignment="Top" Height="139" Width="395" FontSize="48" FontStyle="Italic" FontWeight="Bold" Foreground="#FF59E031" Margin="142,42,-57,0"/>
         <TextBox x:Name="playerTextBox" HorizontalAlignment="Left" Height="73" Margin="24,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169"/>
+        <TextBox x:Name="computerTextBOx" HorizontalAlignment="Left" Height="73" Margin="272,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
+        <TextBlock x:Name="compScore" HorizontalAlignment="Left" Height="75" Margin="335,473,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
+        <TextBlock x:Name="playerScore" HorizontalAlignment="Left" Height="75" Margin="70,473,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
     </Grid>
 
     <!-- ApplicationBar contains new game and highscores -buttons -->

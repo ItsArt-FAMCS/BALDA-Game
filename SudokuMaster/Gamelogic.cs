@@ -322,7 +322,9 @@ namespace SudokuMaster
                 for (int j = 0; j < ColumnLength; j++)
 					Model.BoardNumbers[i][j].Value = ' ';
             //need a word here
+           
             String word = "радость";
+            
             for (int i = 0; i < RowLength; i++)
             {
                 Model.BoardNumbers[RowLength / 2][i].Value = word[i];

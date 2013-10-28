@@ -82,13 +82,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\BaldaProcessor.cs" />
+    <Compile Include="BaldaProcessor.cs" />
     <Compile Include="BoardModel.cs" />
     <Compile Include="BoardValue.cs" />
     <Compile Include="Cell.xaml.cs">
       <DependentUpon>Cell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\Field.cs" />
+    <Compile Include="Field.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameOver.xaml.cs">
       <DependentUpon>GameOver.xaml</DependentUpon>
@@ -110,7 +110,7 @@
     <Compile Include="WaitNote.xaml.cs">
       <DependentUpon>WaitNote.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\Way.cs" />
+    <Compile Include="Way.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
