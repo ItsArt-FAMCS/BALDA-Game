@@ -316,14 +316,14 @@ namespace SudokuMaster
         /// <summary>
         /// Generates a new puzzle
         /// </summary>
-        public void GeneratePuzzle()
+        public void GeneratePuzzle(string Word)
         {
             for (int i = 0; i < RowLength; i++)
                 for (int j = 0; j < ColumnLength; j++)
 					Model.BoardNumbers[i][j].Value = ' ';
             //need a word here
            
-            String word = "радость";
+            String word = Word;
             
             for (int i = 0; i < RowLength; i++)
             {

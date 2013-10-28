@@ -47,7 +47,7 @@ namespace SudokuMaster
         private int cScore = 0;
         public List<string> usedWords = new List<string>();
         private bool containsNewLetter = false;
-        private BaldaProcessor bProc = BaldaProcessor.Instance;
+        private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
         private struct Coords
         {
             public int x;
@@ -80,9 +80,9 @@ namespace SudokuMaster
             InitializeComponent();
 
             // Initialize the grid and instantiate the logic
-            string text = ReadFile("dict/1.txt");
-            bProc.InitializeDictionaries(text);
-
+            
+            
+            //dodod
             
             game = new GameLogic();
             gameTimer = new DispatcherTimer();
@@ -174,12 +174,13 @@ namespace SudokuMaster
 
 			// Disable databinding while generating puzzle
 			DataContext = null;
-
+            string text = ReadFile("dict/1.txt");
+            string word = bProc.Initialize(text);
 			// Puzzle generation takes couple of seconds, do it in another thread
 			ThreadPool.QueueUserWorkItem(dummy =>
 				{
 					// generating puzzle doesn't touch UI so it can run on another thread
-					game.GeneratePuzzle();
+					game.GeneratePuzzle(word);
 
 					// switching to UI thread to modify UI components
 					Deployment.Current.Dispatcher.BeginInvoke(() =>
@@ -357,12 +358,16 @@ namespace SudokuMaster
             {
                 string finalWord = word;
                 word = "";
-                if (bProc.IsWord(finalWord) && containsNewLetter && !usedWords.Contains(finalWord))
+                if (bProc.IsLegalWord(finalWord) && containsNewLetter)
                 {
                     letterPicked = false;
                     started = false;
                     playerTextBox.Text = finalWord;
                     pScore += finalWord.Length;
+                    bProc.AddWord(finalWord, new Processor.Field((int)newLetter.GetValue(Grid.RowProperty), (int)newLetter.GetValue(Grid.ColumnProperty))
+                            {
+                                Value = newLetter.Value
+                            });
                     playerScore.Text = pScore.ToString();
                     foreach (var x in listOfCoords)
                     {
@@ -374,8 +379,8 @@ namespace SudokuMaster
                     for (int i = 0; i < 7; i++)
                         for (int j = 0; j < 7; j++)
                             chars[i, j] = (char)cells[i][j].Value;
-                    Way way = bProc.Process(chars, usedWords);
-                    Field field = way.GetStartField();
+                    var way = bProc.AIProcess();
+                    var field = way.NewField;
                     string compWord = way.Word;
                     usedWords.Add(compWord);
                     computerTextBOx.Text = compWord;
@@ -422,7 +427,7 @@ namespace SudokuMaster
 			else if (pos.Y > LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height)
 				pos.Y = LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height;
 
-			return new Thickness(0, 0, 0, 0);
+			return new Thickness(30, 120, 0, 0);
 		}
 
 		/// <summary>
