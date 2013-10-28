@@ -112,12 +112,12 @@
 
             <!-- Waiting indicator -->
             <local:WaitNote x:Name="waitIndicator" Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed"/>
+            <TextBlock x:Name="compScore" HorizontalAlignment="Left" Height="75" Margin="335,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Grid.Column="1" Grid.RowSpan="2" FontSize="36" Foreground="#FFF70B0B"/>
         </Grid>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Балда" VerticalAlignment="Top" Height="36" Width="204" FontSize="48" FontStyle="Italic" FontWeight="Bold" Foreground="#FF59E031" RenderTransformOrigin="0.5,0.5"/>
         <TextBox x:Name="playerTextBox" HorizontalAlignment="Left" Height="73" Margin="24,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169"/>
         <TextBox x:Name="computerTextBOx" HorizontalAlignment="Left" Height="73" Margin="272,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
-        <TextBlock x:Name="compScore" HorizontalAlignment="Left" Height="75" Margin="335,473,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
-        <TextBlock x:Name="playerScore" HorizontalAlignment="Left" Height="75" Margin="70,473,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
+        <TextBlock x:Name="playerScore" HorizontalAlignment="Left" Height="75" Margin="56,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" FontSize="36" Foreground="#FF06B917"/>
     </Grid>
 
     <!-- ApplicationBar contains new game and highscores -buttons -->
