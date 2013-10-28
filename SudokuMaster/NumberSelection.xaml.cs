@@ -67,6 +67,7 @@ namespace SudokuMaster
 		{
 			fadeInAnimation.Begin();
 			Visibility = System.Windows.Visibility.Visible;
+            
 		}
         
         /// <summary>
@@ -77,6 +78,7 @@ namespace SudokuMaster
         private void FadeOutAnimation_Completed(object sender, EventArgs e)
         {
 			this.Visibility = System.Windows.Visibility.Collapsed;
+           
         }
 
         /// <summary>
