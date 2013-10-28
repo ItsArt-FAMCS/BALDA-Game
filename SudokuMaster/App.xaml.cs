@@ -16,9 +16,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using SudokuMaster.Debug;
+using Balda.Debug;
 
-namespace SudokuMaster
+namespace Balda
 {
     public partial class App : Application
     {

@@ -3,7 +3,7 @@
  */
 
 
-namespace SudokuMaster
+namespace Balda
 {
 	public class BoardModel
 	{

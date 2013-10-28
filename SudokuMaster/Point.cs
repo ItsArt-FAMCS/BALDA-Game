@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace SudokuMaster
+namespace Balda
 {
 	public class Point
 	{

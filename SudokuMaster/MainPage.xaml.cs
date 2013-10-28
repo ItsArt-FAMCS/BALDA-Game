@@ -17,7 +17,7 @@ using System.Windows.Threading;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace SudokuMaster
+namespace Balda
 {
     /// <summary>
     /// Main page of the application, the game itself

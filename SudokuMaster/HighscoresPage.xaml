@@ -3,7 +3,7 @@
  -->
 
 <phone:PhoneApplicationPage 
-    x:Class="SudokuMaster.Highscores"
+    x:Class="Balda.Highscores"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -23,7 +23,7 @@
         <!-- Background for the grid. Same image is used as in main page. -->
         <Image Source="Background.png" Stretch="Fill" />
 
-        <!-- Sudokumaster logo/title on the top of the page. -->
+        <!-- Balda logo/title on the top of the page. -->
         <Image HorizontalAlignment="Center" Source="gfx/logo.png" VerticalAlignment="Top" />
 
         <!-- The highscores text below the logo. -->

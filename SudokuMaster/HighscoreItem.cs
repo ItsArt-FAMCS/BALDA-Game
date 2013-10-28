@@ -6,7 +6,7 @@ using System;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SudokuMaster
+namespace Balda
 {
 	/// <summary>
 	/// Represents a single score in highscore list.

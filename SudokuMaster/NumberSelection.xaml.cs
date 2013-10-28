@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace SudokuMaster
+namespace Balda
 {
     /// <summary>
     /// Number selection control which is shown when the player touches a cell on the game grid

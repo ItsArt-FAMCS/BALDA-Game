@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.Phone.Info;
 
-namespace SudokuMaster.Debug
+namespace Balda.Debug
 {
     /// <summary>
     /// Helper class for showing current memory usage.

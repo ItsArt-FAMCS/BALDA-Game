@@ -1,7 +1,7 @@
 ﻿<!--
  Copyright (c) 2011 Nokia Corporation.
  -->
-<UserControl x:Class="SudokuMaster.WaitNote"
+<UserControl x:Class="Balda.WaitNote"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

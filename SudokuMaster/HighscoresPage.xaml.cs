@@ -9,7 +9,7 @@ using System.IO.IsolatedStorage;
 using System.Xml.Serialization;
 using Microsoft.Phone.Controls;
 
-namespace SudokuMaster
+namespace Balda
 {
     /// <summary>
     /// The highscores page.
@@ -45,7 +45,7 @@ namespace SudokuMaster
             {
                 for (int i = 1; i <= 20; i++)
                 {
-                    scores.Add(new HighscoreItem(i, "Sudokumaster",
+                    scores.Add(new HighscoreItem(i, "Balda",
                         new TimeSpan(0, 59, 59), 100));
                 }
                 Save();

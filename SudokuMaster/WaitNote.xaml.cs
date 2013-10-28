@@ -15,7 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Globalization;
 
-namespace SudokuMaster
+namespace Balda
 {
     /// <summary>
     /// Wait note, spinning circle animation

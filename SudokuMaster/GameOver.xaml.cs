@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace SudokuMaster
+namespace Balda
 {
     /// <summary>
     /// The dialog displayed when the puzzle is solved.

@@ -5,7 +5,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
-namespace SudokuMaster
+namespace Balda
 {
 	public class SoundHelper
 	{
