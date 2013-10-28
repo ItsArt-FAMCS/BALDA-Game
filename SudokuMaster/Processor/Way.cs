@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SudokuMaster.Tools
+namespace SudokuMaster.Processor
 {
     class Way
     {
