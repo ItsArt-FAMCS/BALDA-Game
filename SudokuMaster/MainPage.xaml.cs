@@ -261,7 +261,7 @@ namespace SudokuMaster
         private BitmapImage lightImage = new BitmapImage(new Uri("/gfx/lightGridItem.png", UriKind.Relative));
 		private Cell[][] CreateGrid()
 		{
-
+            
 			bool lightCell = false;
 			Cell[][] cells = new Cell[GameLogic.RowLength][];
             chars = new char[GameLogic.RowLength, GameLogic.ColumnLength];
@@ -269,7 +269,6 @@ namespace SudokuMaster
 			for (int row = 0; row < GameLogic.RowLength; row++)
 			{
 				cells[row] = new Cell[GameLogic.ColumnLength];
-                //chars[row] = new char[GameLogic.ColumnLength];
 				if (row % GameLogic.WordLength != 0)
 					lightCell = !lightCell;
 
@@ -376,9 +375,6 @@ namespace SudokuMaster
                     usedWords.Add(finalWord);
 
                     //вынести в отдельную функцию
-                    for (int i = 0; i < 7; i++)
-                        for (int j = 0; j < 7; j++)
-                            chars[i, j] = (char)cells[i][j].Value;
                     var way = bProc.AIProcess();
                     var field = way.NewField;
                     string compWord = way.Word;

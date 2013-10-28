@@ -321,7 +321,7 @@ namespace SudokuMaster
             for (int i = 0; i < RowLength; i++)
                 for (int j = 0; j < ColumnLength; j++)
 					Model.BoardNumbers[i][j].Value = ' ';
-            //need a word here
+            
            
             String word = Word;
             
