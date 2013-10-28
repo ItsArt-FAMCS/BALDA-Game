@@ -172,8 +172,14 @@ namespace SudokuMaster.Processor
             var startNeighbors = startWay.GetNeighbors(start);
             foreach (var neighbor in startNeighbors)
             {
-                ways.Add(startWay.AddFirst(neighbor));
-                ways.Add(startWay.AddLast(neighbor));
+                ways.Add(startWay.AddFirst(new Field(neighbor.X, neighbor.Y)
+                {
+                    Value = neighbor.Value
+                }));
+                ways.Add(startWay.AddLast(new Field(neighbor.X, neighbor.Y)
+                {
+                    Value = neighbor.Value
+                }));
             }
             return ways;
         }
