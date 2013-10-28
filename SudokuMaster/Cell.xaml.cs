@@ -87,7 +87,7 @@ namespace SudokuMaster
 			var cell = d as Cell;
 			var value = (bool)e.NewValue;
 
-			cell.textValue.Foreground = value ? blackBrush : whiteBrush;
+			cell.textValue.Foreground = blackBrush;
 		}
 
 		/// <summary>
