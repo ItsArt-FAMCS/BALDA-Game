@@ -309,7 +309,6 @@ namespace SudokuMaster
 		private void OnCellTouched(object sender, MouseButtonEventArgs e)
 		{
 			Cell cell = sender as Cell;
-
 			if (!cell.IsPlayerSettable)
 				return;
             if (letterPicked)
