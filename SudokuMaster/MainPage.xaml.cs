@@ -427,7 +427,7 @@ namespace SudokuMaster
 			else if (pos.Y > LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height)
 				pos.Y = LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height;
 
-			return new Thickness(30, 120, 0, 0);
+			return new Thickness(20, 100, 0, 0);
 		}
 
 		/// <summary>

@@ -168,7 +168,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="dict\1.txt" />
-    <Content Include="dict\TextFile1.txt" />
     <Content Include="gfx\back.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
