@@ -321,6 +321,8 @@ namespace SudokuMaster
             {
                 if (cell.Value == ' ' || cell == newLetter)
                 {
+                    if(newCompLetter != null)
+                    newCompLetter.BackgroundImage.Source = lightImage;
                     // This lambda experssion will allow us to have access to destination cell in a clean way
                     numberSelection.OnSelectedNumber = (selectedNumber => OnNumberChoosen(cell, selectedNumber));
 
@@ -351,6 +353,8 @@ namespace SudokuMaster
             }
             
         }
+        private Cell newCompLetter;
+
         private void OnCellLost(object sender, ManipulationCompletedEventArgs e)
         {
             if (started)
@@ -383,6 +387,8 @@ namespace SudokuMaster
                     cScore += compWord.Length;
                     compScore.Text = cScore.ToString();
                     cells[field.X][field.Y].Value = field.Value;
+                    newCompLetter = cells[field.X][field.Y];
+                    newCompLetter.BackgroundImage.Source = darkImage;
                     containsNewLetter = false;
                     
                 }
