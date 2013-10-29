@@ -111,7 +111,9 @@ namespace Balda.Processor
             var viewResult = new WayView(result, ShortWordsContainer, Used);
             if (!string.IsNullOrEmpty(viewResult.Word))
             {
-                Used.Add(viewResult.Word);
+                var word = viewResult.Word;
+                Used.Add(word);
+                AIPoints += word.Length;
             }
             return viewResult;
         }
@@ -129,6 +131,7 @@ namespace Balda.Processor
                 field.Step = null;
                 Desk[field.X, field.Y] = field;
                 Used.Add(word);
+                MembersPoints += word.Length;
                 return true;
             }
             return false;
