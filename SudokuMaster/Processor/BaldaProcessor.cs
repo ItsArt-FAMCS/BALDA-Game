@@ -5,10 +5,18 @@ using System.Text;
 
 namespace Balda.Processor
 {
+    public enum DifficultyLevel
+    {
+        Easy = 1,
+        Addaptive = 2,
+        Insane = 3
+    }
+
     class BaldaProcessor
     {
         public const int KeyLength = 4;
         public const int Size = 7;
+        public const int AdaptiveDelta = 2;
         public const string Alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
         //Singleton
@@ -23,26 +31,34 @@ namespace Balda.Processor
         private List<string> Words { get; set; }
         private Dictionary<string, List<string>> LongWordsContainer { get; set; }
         private List<string> ShortWordsContainer { get; set; }
+        private static DifficultyLevel Difficulty { get; set; }
+        private static int MembersPoints { get; set; }
+        private static int AIPoints { get; set; }
+        private static Random random { get; set; }
 
         private Field[,] Desk { get; set; }
 
         public List<string> Used { get; set; }
 
-        public string Initialize(String words)
+        public string Initialize(String words, DifficultyLevel difficulty = DifficultyLevel.Addaptive)
         {
             InitializeDictionaries(words);
-            return Restart();
+            random = new Random();
+            return Restart(difficulty);
         }
 
-        public string Restart()
+        public string Restart(DifficultyLevel difficulty)
         {
+            Difficulty = difficulty;
+            MembersPoints = 0;
+            AIPoints = 0;
+
             Desk = new Field[Size, Size];
 
             var startWords = Words.Where(e => e.Length == Size).ToArray();
-            var rand = new Random();
-            var wordNumber = rand.Next(0, startWords.Count() - 1);
+            var wordNumber = random.Next(0, startWords.Count() - 1);
             var startword = startWords[wordNumber];
-            Used = new List<string> {startword};
+            Used = new List<string> { startword };
 
             for (int i = 0; i < Size; i++)
             {
@@ -86,7 +102,7 @@ namespace Balda.Processor
             if (result == null)
             {
                 return null;
-            } 
+            }
             var field = result.GetStartField();
             Desk[field.X, field.Y] = new Field(field.X, field.Y)
             {
@@ -117,10 +133,10 @@ namespace Balda.Processor
             }
             return false;
         }
-        
+
         protected void InitializeDictionaries(String words)
         {
-            Words = words.Split(new[] { ' ', '\r', '\n', '\t' }).Where(e => e != string.Empty).Select(e=> e.ToLower().Trim()).ToList();
+            Words = words.Split(new[] { ' ', '\r', '\n', '\t' }).Where(e => e != string.Empty).Select(e => e.ToLower().Trim()).ToList();
             LongWordsContainer = new Dictionary<string, List<string>>();
             ShortWordsContainer = new List<string>();
 
@@ -235,6 +251,24 @@ namespace Balda.Processor
                     result = way;
                 }
             }
+            if (Difficulty == DifficultyLevel.Easy && result != null)
+            {
+                return result;
+            }
+            if (Difficulty == DifficultyLevel.Addaptive && result != null)
+            {
+                if (Math.Abs(MembersPoints - AIPoints) <= AdaptiveDelta)
+                {
+                    if (random.NextDouble() < 0.5)
+                    {
+                        return result;
+                    }
+                }
+                else if (MembersPoints < AIPoints)
+                {
+                    return result;
+                }
+            }
             //Поиск в ширину, короче
             while (ways.Count > 0)
             {
@@ -247,7 +281,7 @@ namespace Balda.Processor
                     {
                         ways.Add(way);
                     }
-                    if ((result == null || way.Text.Length > result.Text.Length) 
+                    if ((result == null || way.Text.Length > result.Text.Length)
                         && ((way.IsWord && Used.Contains(way.Word) == false) || (way.TwoWords && Used.Contains(way.Reverse) == false)))
                     {
                         result = way;
