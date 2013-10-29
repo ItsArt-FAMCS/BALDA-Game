@@ -257,7 +257,7 @@ namespace Balda.Processor
             }
             if (Difficulty == DifficultyLevel.Addaptive && result != null)
             {
-                if (Math.Abs(MembersPoints - AIPoints) <= AdaptiveDelta)
+                if (Math.Abs(MembersPoints - AIPoints - KeyLength) <= AdaptiveDelta)
                 {
                     if (random.NextDouble() < 0.5)
                     {
