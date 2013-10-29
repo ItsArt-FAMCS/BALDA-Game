@@ -337,18 +337,51 @@ namespace Balda
 		}
 
         private bool started = false; //rename
+        private Cell previousCell;
 
         private void OnCellEnter(object sender, MouseEventArgs e)
         {
             if (letterPicked)
             {
+                
                 started = true;
                 Cell cell = sender as Cell;
-                if (cell == newLetter)
-                    containsNewLetter = true;
-                cell.BackgroundImage.Source = darkImage;
-                word += (char)cell.Value;
-                listOfCoords.Add(cell);
+                if (previousCell != null)
+                {
+                    if (Math.Abs((int)previousCell.GetValue(Grid.RowProperty) - (int)cell.GetValue(Grid.RowProperty)) == 1
+                        || Math.Abs((int)previousCell.GetValue(Grid.ColumnProperty) - (int)cell.GetValue(Grid.ColumnProperty)) == 1)
+                    {
+                        if (cell == newLetter)
+                            containsNewLetter = true;
+                        cell.BackgroundImage.Source = darkImage;
+                        word += (char)cell.Value;
+                        listOfCoords.Add(cell);
+                        previousCell = cell;
+                    }
+                    else
+                    {
+                        word = "";
+                        foreach (var x in listOfCoords)
+                        {
+
+                            x.BackgroundImage.Source = lightImage;
+                        }
+                        previousCell = null;
+                        listOfCoords = new List<Cell>();
+                        started = false;
+                        containsNewLetter = false;
+                    }
+                }
+                else
+                {
+                    if (cell == newLetter)
+                        containsNewLetter = true;
+                    cell.BackgroundImage.Source = darkImage;
+                    word += (char)cell.Value;
+                    listOfCoords.Add(cell);
+                    previousCell = cell;
+                }
+                
             }
             
         }
@@ -407,6 +440,7 @@ namespace Balda
                         x.BackgroundImage.Source = lightImage;
                     }
                 }
+                previousCell = null;
             }
         }
 
