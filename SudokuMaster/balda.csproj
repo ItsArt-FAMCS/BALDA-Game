@@ -113,6 +113,9 @@
     <Compile Include="Processor\Field.cs" />
     <Compile Include="Processor\Way.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SoundHelper.cs" />
     <Compile Include="WaitNote.xaml.cs">
       <DependentUpon>WaitNote.xaml</DependentUpon>
@@ -160,6 +163,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="PageSwitch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

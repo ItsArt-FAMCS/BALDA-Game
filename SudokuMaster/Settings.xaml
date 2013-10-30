@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="balda.Menu"
+    x:Class="balda.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -21,14 +21,16 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28"/>
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="Настройки" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button x:Name="NewGameButton" Content="Новая игра" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top" Width="436" Height="153"/>
-            <Button x:Name="SettingsButton" Content="Настройки" HorizontalAlignment="Left" Height="147" Margin="10,255,0,0" VerticalAlignment="Top" Width="436"/>
-            <Button x:Name="ResumeGameButton" Content="Продолжить игру" HorizontalAlignment="Left" Height="71" Margin="100,26,0,0" VerticalAlignment="Top" Width="254" Visibility="Collapsed"/>
-
+            <Button x:Name="Oponent" Content="Играть против компьютера" HorizontalAlignment="Left" Height="146" Margin="10,73,0,0" VerticalAlignment="Top" Width="413" Click="Oponent_Click"/>
+            <Button x:Name="Difficulty" Content="Средняя сложность" HorizontalAlignment="Left" Height="146" Margin="10,224,0,0" VerticalAlignment="Top" Width="413" Click="Difficulty_Click"/>
+            <Button x:Name="BoardSize" Content="Поле 7х7" HorizontalAlignment="Left" Height="146" Margin="10,375,0,0" VerticalAlignment="Top" Width="413" Click="BoardSize_Click"/>
+            <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" Height="126" Margin="10,508,0,0" VerticalAlignment="Top" Width="413"/>
         </Grid>
     </Grid>
 

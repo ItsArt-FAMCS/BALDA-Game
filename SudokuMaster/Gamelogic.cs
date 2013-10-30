@@ -4,8 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Balda
 {
@@ -21,7 +23,9 @@ namespace Balda
 		public const int RowLength = WordLength;
 		public const int ColumnLength = WordLength;
 		public const int MaxEmptyCells = 45;
-
+        public Processor.DifficultyLevel dificulty = Processor.DifficultyLevel.Addaptive; //normal diff by default
+        public int size = 7;
+        public bool compOponent = true;
         protected int[] randOrder;
         protected bool solutionFound = false;
 		private char[][] copyCells;
@@ -30,120 +34,19 @@ namespace Balda
         public int EmptyCells { get; set; }
         public int PlayerMoves { get; set; }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="gridCells">9x9 array of Cells, the game board cells</param>
-        public GameLogic()
+        private static readonly GameLogic _instance = new GameLogic();
+        public static GameLogic Instance
         {
-			Model = new BoardModel(ColumnLength, RowLength);
+            get { return _instance; }
+        }
+        protected GameLogic()
+        {
+			Model = new BoardModel(size, size);
         }
 
-        /// <summary>
-        /// Tests rows for conflicting cells
-        /// </summary>
-        /// <param name="x">X coordinate to check</param>
-        /// <param name="y">Y coordinate to check</param>
-        /// <param name="value">Number to test</param>
-        /// <param name="useCopy">Tells whether we use the main array or a copy of it</param>
-        /// <returns>Conflicting point or null if no conflict</returns>
-        private Point GetConflictsInRow(int x, int y, int value, bool useCopy)
-        {
-            for (int i = 0; i < RowLength; i++)
-            {
-				if (useCopy)
-				{
-                    if (i != x &&
-						copyCells[i][y] != 0 &&
-						copyCells[i][y] == value)
-                    {
-                        return new Point(i, y);
-                    }
-				}
-				else
-				{
-					if (i != x &&
-						Model.BoardNumbers[i][y].Value != 0 &&
-						Model.BoardNumbers[i][y].Value == value)
-					{
-						return new Point(i, y);;
-					}
-				}
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Tests columns for conflicting cells
-        /// </summary>
-        /// <param name="x">X coordinate to check</param>
-        /// <param name="y">Y coordinate to check</param>
-        /// <param name="value">Number to test</param>
-        /// <param name="useCopy">Tells whether we use the main array or a copy of it</param>
-		/// <returns>Conflicting point or null if no conflict</returns>
-        private Point GetConflictsInColumn(int x, int y, int value, bool useCopy)
-        {
-            for (int i = 0; i < ColumnLength; i++)
-            {
-				if (useCopy)
-				{
-                    if (i != y &&
-						copyCells[x][i] != 0 &&
-						copyCells[x][i] == value)
-                    {
-                        return new Point(x, i);
-                    }
-				}
-				else
-				{
-					if (i != y &&
-						Model.BoardNumbers[x][i].Value != 0 &&
-						Model.BoardNumbers[x][i].Value == value)
-					{
-						return new Point(x, i);
-					}
-				}
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Tests blocks (3x3) for conflicting cells
-        /// </summary>
-        /// <param name="x">X coordinate to check</param>
-        /// <param name="y">Y coordinate to check</param>
-        /// <param name="value">Number to test</param>
-        /// <param name="useCopy">Tells whether we use the main array or a copy of it</param>
-		/// <returns>Conflicting point or null if no conflict</returns>
-        private Point TestBlock(int x, int y, int value, bool useCopy)
-        {
-            int blocksFirstX = ((int)(x / 3)) * 3;
-            int blocksFirstY = ((int)(y / 3)) * 3;
-			for (int i = blocksFirstX; i < blocksFirstX + 3; i++)
-			{
-				for (int j = blocksFirstY; j < blocksFirstY + 3; j++)
-				{
-					if (useCopy)
-					{
-						if (copyCells[i][j] != 0)
-							if (i != x && j != y && copyCells[i][j] == value)
-							{
-								return new Point(i, j);
-							}
-					}
-					else
-					{
-						if (Model.BoardNumbers[i][j].Value != 0)
-							if (i != x && j != y && Model.BoardNumbers[i][j].Value == value)
-							{
-								return new Point(i, j);
-							}
-					}
-				}
-			}
-            return null;
-        }
+        
+        
+      
 
         private bool TestLetter(int x, int y, char letter)
         {
@@ -188,129 +91,24 @@ namespace Balda
 			}
         }
 
-        /// <summary>
-        /// Checks whether the puzzle has an unique solution.
-        /// The algorithm is mainly the same as is fillCell().
-        /// </summary>
-        /// <param name="x">X coordinate on the grid</param>
-        /// <param name="y">Y coordinate on the grid</param>
-        /// <returns>true if if it does, false otherwise.</returns>
-      /*  public bool CheckUniqueness(int x, int y)
+      
+
+        private string ReadFile(string filePath)
         {
-            if (y == RowLength)
+            //this verse is loaded for the first time so fill it from the text file
+            var ResrouceStream = Application.GetResourceStream(new Uri(filePath, UriKind.Relative));
+            if (ResrouceStream != null)
             {
-                if (solutionFound)
+                Stream myFileStream = ResrouceStream.Stream;
+                if (myFileStream.CanRead)
                 {
-                    solutionFound = false;
-                    return true;
-                }
-                solutionFound = true;
-                return false;
-            }
+                    StreamReader myStreamReader = new StreamReader(myFileStream);
 
-            int nextX = x + 1, nextY = y;
-            if (x == RowLength - 1)
-            {
-                nextX = 0;
-                nextY = y + 1;
-            }
-
-			if (Model.BoardNumbers[x][y].Value != 0)
-            {
-                if (CheckUniqueness(nextX, nextY))
-                    return true;
-            }
-            else
-            {
-                for (int i = 1; i <= 9; i++)
-                    if (SetLetter(x, y, i, true))
-                    {
-                        if (CheckUniqueness(nextX, nextY))
-                            return true;
-
-						Model.BoardNumbers[x][y].Value = 0;
-                    }
-            }
-            return false;
-        }*/
-
-        /// <summary>
-        /// Removes numbers from the board until a desired puzzle is obtained.
-        /// Checks after every deletion that the puzzle still has an unique solution.
-        /// </summary>
-      /*  private void RemoveCells()
-        {
-            while (EmptyCells < MaxEmptyCells)
-            {
-                int randX = randGen.Next(ColumnLength);
-                int randY = randGen.Next(RowLength);
-				int temp = Model.BoardNumbers[randX][randY].Value;
-                
-				if (temp != 0)
-                {
-					Model.BoardNumbers[randX][randY].Value = 0;
-                    MakeCopy();
-                    
-					if (CheckUniqueness(0, 0))
-						Model.BoardNumbers[randX][randY].Value = temp;
-                    else
-                        EmptyCells++;
+                    //read the content here
+                    return myStreamReader.ReadToEnd();
                 }
             }
-        }*/
-
-        /// <summary>
-        /// Generates a random full sudoku board by using recursive
-        /// backtracking method.
-        /// </summary>
-        /// <param name="x">X coordinate on the grid</param>
-        /// <param name="y">Y coordinate on the grid</param>
-        /*private bool FillCell(int x, int y)
-        {
-            if (y == RowLength)
-                return true;
-
-            int nextX = x + 1, nextY = y;
-            if (x == ColumnLength - 1)
-            {
-                nextX = 0;
-                nextY = y + 1;
-            }
-
-            for (int i = 0; i < RowLength; i++)
-            {
-                if (SetLetter(x, y, randOrder[i], false) && FillCell(nextX, nextY))
-                    return true;
-
-				Model.BoardNumbers[x][y].Value = 0;
-            }
-            return false;
-        }
-        */
-        /// <summary>
-        /// Creates an array with numbers 1-9 in it, ordered randomly.
-        /// </summary>
-        private void FillRandOrder()
-        {
-            randOrder = new int[RowLength];
-            bool isSet = false;
-            int rand, j;
-            for (int i = 0; i < RowLength; i++)
-            {
-                while (!isSet)
-                {
-                    rand = randGen.Next(ColumnLength) + 1;
-                    for (j = 0; j < ColumnLength; j++)
-                        if (rand == randOrder[j])
-                            break;
-                    if (j == ColumnLength)
-                    {
-                        randOrder[i] = rand;
-                        isSet = true;
-                    }
-                }
-                isSet = false;
-            }
+            return "NULL";
         }
 
         /// <summary>
@@ -318,16 +116,16 @@ namespace Balda
         /// </summary>
         public void GeneratePuzzle(string Word)
         {
-            for (int i = 0; i < RowLength; i++)
-                for (int j = 0; j < ColumnLength; j++)
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
 					Model.BoardNumbers[i][j].Value = ' ';
+
+            string text = ReadFile("dict/1.txt");
+            string word = Processor.BaldaProcessor.Instance.Initialize(text, dificulty);
             
-           
-            String word = Word;
-            
-            for (int i = 0; i < RowLength; i++)
+            for (int i = 0; i < size; i++)
             {
-                Model.BoardNumbers[RowLength / 2][i].Value = word[i];
+                Model.BoardNumbers[size / 2][i].Value = word[i];
             }
         }
 

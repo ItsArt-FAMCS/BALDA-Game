@@ -35,7 +35,6 @@ namespace Balda
         };
 
         const String gameStateFile = "gamestate.dat";
-        private GameLogic game;
         private GameState gameState = GameState.NotStarted;
         private DispatcherTimer gameTimer;
         private DateTime gameStartTime;
@@ -45,6 +44,7 @@ namespace Balda
         private char[,] chars;
         private int pScore = 0;
         private int cScore = 0;
+        private bool secondPlayer = false;
         public List<string> usedWords = new List<string>();
         private bool containsNewLetter = false;
         private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
@@ -58,23 +58,7 @@ namespace Balda
         /// Constructor
         /// </summary>
         /// 
-        private string ReadFile(string filePath)
-        {
-            //this verse is loaded for the first time so fill it from the text file
-            var ResrouceStream = Application.GetResourceStream(new Uri(filePath, UriKind.Relative));
-            if (ResrouceStream != null)
-            {
-                Stream myFileStream = ResrouceStream.Stream;
-                if (myFileStream.CanRead)
-                {
-                    StreamReader myStreamReader = new StreamReader(myFileStream);
-
-                    //read the content here
-                    return myStreamReader.ReadToEnd();
-                }
-            }
-            return "NULL";
-        }
+        
         public MainPage()
         {
             InitializeComponent();
@@ -84,7 +68,7 @@ namespace Balda
             
             //dodod
             
-            game = new GameLogic();
+           // game = new GameLogic();
             gameTimer = new DispatcherTimer();
             gameTimer.Interval = TimeSpan.FromSeconds(1);
             gameTimer.Tick += StatusTimerTick;
@@ -175,18 +159,17 @@ namespace Balda
 
 			// Disable databinding while generating puzzle
 			DataContext = null;
-            string text = ReadFile("dict/1.txt");
-            string word = bProc.Initialize(text);
+            
 			// Puzzle generation takes couple of seconds, do it in another thread
 			ThreadPool.QueueUserWorkItem(dummy =>
 				{
 					// generating puzzle doesn't touch UI so it can run on another thread
-					game.GeneratePuzzle(word);
+                    GameLogic.Instance.GeneratePuzzle(word);
 
 					// switching to UI thread to modify UI components
 					Deployment.Current.Dispatcher.BeginInvoke(() =>
 						{
-							DataContext = game.Model; // let's turn on databinding again
+							DataContext = GameLogic.Instance.Model; // let's turn on databinding again
 							gameTimer.Start();
 							gameStartTime = DateTime.Now;
 							gameState = GameState.Ongoing;
@@ -207,8 +190,8 @@ namespace Balda
             GameTime.Text  = String.Format("{0:D1}:{1:D2}:{2:D2}",
                 gameTimeElapsed.Hours, gameTimeElapsed.Minutes, gameTimeElapsed.Seconds);
 
-            Empty.Text = game.EmptyCells.ToString();
-            Moves.Text = game.PlayerMoves.ToString();
+            Empty.Text = GameLogic.Instance.EmptyCells.ToString();
+            Moves.Text = GameLogic.Instance.PlayerMoves.ToString();
 
         }
 
@@ -224,7 +207,7 @@ namespace Balda
             {
                 for (int col = 0; col < GameLogic.ColumnLength; col++)
                 {
-					game.Model.BoardNumbers[row][col].SetByGame = true; // to block the user input
+					GameLogic.Instance.Model.BoardNumbers[row][col].SetByGame = true; // to block the user input
                     cells[row][col].Blink();
                 }
             }
@@ -233,7 +216,7 @@ namespace Balda
             HighscoreItem score = new HighscoreItem();
             score.Time = new TimeSpan(gameTimeElapsed.Days, gameTimeElapsed.Hours,
                 gameTimeElapsed.Minutes, gameTimeElapsed.Seconds, 0);
-            score.Moves = game.PlayerMoves;
+            score.Moves = GameLogic.Instance.PlayerMoves;
 
 
 			//TODO: move this to XAML
@@ -264,19 +247,20 @@ namespace Balda
 		{
             
 			bool lightCell = false;
-			Cell[][] cells = new Cell[GameLogic.RowLength][];
-            chars = new char[GameLogic.RowLength, GameLogic.ColumnLength];
+            int size = GameLogic.Instance.size;
+			Cell[][] cells = new Cell[size][];
+            chars = new char[size, size];
             listOfCoords = new List<Cell>();
-			for (int row = 0; row < GameLogic.RowLength; row++)
+            for (int row = 0; row < size; row++)
 			{
-				cells[row] = new Cell[GameLogic.ColumnLength];
-				if (row % GameLogic.WordLength != 0)
+                cells[row] = new Cell[size];
+                if (row % size != 0)
 					lightCell = !lightCell;
 
-				for (int col = 0; col < GameLogic.ColumnLength; col++)
+                for (int col = 0; col < size; col++)
 				{
                     // switch image type (light or dark) after each 3 cells in row
-					if (col % GameLogic.WordLength == 0)
+                    if (col % size == 0)
 						lightCell = !lightCell;
 
 					Cell c = new Cell();
@@ -315,7 +299,6 @@ namespace Balda
             if (letterPicked)
             {
                 //do nothing
-                //word += (char)cell.Value;
             }
             else
             {
@@ -344,7 +327,6 @@ namespace Balda
         {
             if (letterPicked)
             {
-                
                 started = true;
                 Cell cell = sender as Cell;
                 if (previousCell != null)
@@ -398,31 +380,39 @@ namespace Balda
                 {
                     letterPicked = false;
                     started = false;
-                    playerTextBox.Text = finalWord;
-                    pScore += finalWord.Length;
+                    if (!GameLogic.Instance.compOponent)
+                    {
+                        if(secondPlayer)
+                        {
+                            computerTextBOx.Text = finalWord;
+                            cScore += finalWord.Length;
+                            compScore.Text = cScore.ToString();
+                            secondPlayer = false;
+                        }
+                        else
+                        {
+                            playerTextBox.Text = finalWord;
+                            pScore += finalWord.Length;
+                            playerScore.Text = pScore.ToString();
+                            secondPlayer = true;
+                        }
+
+                    }
                     bProc.AddWord(finalWord, new Processor.Field((int)newLetter.GetValue(Grid.RowProperty), (int)newLetter.GetValue(Grid.ColumnProperty))
                             {
                                 Value = newLetter.Value
                             });
-                    playerScore.Text = pScore.ToString();
+                    
+                        
                     foreach (var x in listOfCoords)
                     {
                         x.BackgroundImage.Source = lightImage;
                     }
                     usedWords.Add(finalWord);
 
-                    //вынести в отдельную функцию
-                    var way = bProc.AIProcess();
-                    var field = way.NewField;
-                    string compWord = way.Word;
-                    usedWords.Add(compWord);
-                    computerTextBOx.Text = compWord;
-                    cScore += compWord.Length;
-                    compScore.Text = cScore.ToString();
-                    cells[field.X][field.Y].Value = field.Value;
-                    newCompLetter = cells[field.X][field.Y];
-                    newCompLetter.BackgroundImage.Source = darkImage;
-                    containsNewLetter = false;
+                    if (GameLogic.Instance.compOponent)
+                        AIMove();
+                    
                     
                 }
                 else
@@ -431,10 +421,9 @@ namespace Balda
                     letterPicked = false;
                     started = false;
                     containsNewLetter = false;
-                    game.SetNumberByPlayer((int)newLetter.GetValue(Grid.RowProperty),
+                    GameLogic.Instance.SetNumberByPlayer((int)newLetter.GetValue(Grid.RowProperty),
                                                           (int)newLetter.GetValue(Grid.ColumnProperty),
                                                           ' ');
-                    //newLetter.Value = ' ';
                     foreach (var x in listOfCoords)
                     {
                         
@@ -443,6 +432,21 @@ namespace Balda
                 }
                 previousCell = null;
             }
+        }
+
+        private void AIMove()
+        {
+            var way = bProc.AIProcess();
+            var field = way.NewField;
+            string compWord = way.Word;
+            usedWords.Add(compWord);
+            computerTextBOx.Text = compWord;
+            cScore += compWord.Length;
+            compScore.Text = cScore.ToString();
+            cells[field.X][field.Y].Value = field.Value;
+            newCompLetter = cells[field.X][field.Y];
+            newCompLetter.BackgroundImage.Source = darkImage;
+            containsNewLetter = false;
         }
 
 		/// <summary>
@@ -473,7 +477,7 @@ namespace Balda
 		{
             int x = (int)sender.GetValue(Grid.RowProperty);
             int y = (int)sender.GetValue(Grid.ColumnProperty);
-			var conflictingCells = game.SetNumberByPlayer((int)sender.GetValue(Grid.RowProperty),
+            var conflictingCells = GameLogic.Instance.SetNumberByPlayer((int)sender.GetValue(Grid.RowProperty),
 														  (int)sender.GetValue(Grid.ColumnProperty), 
 														  number);
 
@@ -494,7 +498,7 @@ namespace Balda
         /// <param name="r">Event arguments.</param>
         void App_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            StoreState();
+            
         }
 
         /// <summary>
@@ -514,21 +518,12 @@ namespace Balda
 				{
 					// Read the state and stats
 					gameState = (GameState)reader.ReadInt32();
-					game.PlayerMoves = reader.ReadInt32();
+                    GameLogic.Instance.PlayerMoves = reader.ReadInt32();
 					gameTimeElapsed = new TimeSpan(reader.ReadInt64());
 					gameStartTime = DateTime.Now - gameTimeElapsed;
 
 					// Read contents of the cells
-					for (int row = 0; row < GameLogic.RowLength; row++)
-					{
-						for (int col = 0; col < GameLogic.ColumnLength; col++)
-						{
-							
-
-                            //if (value == 0)
-                            //    emptyCells++;
-						}
-					}
+					
 				}
 			}
 
@@ -536,46 +531,19 @@ namespace Balda
 
             if (gameState == GameState.Ongoing)
             {
-                game.EmptyCells = emptyCells;
+                GameLogic.Instance.EmptyCells = emptyCells;
                 gameTimer.Start();
             }
             else
             {
-                game.EmptyCells = 0;
+                GameLogic.Instance.EmptyCells = 0;
             }
 
-			DataContext = game.Model;
+			DataContext = GameLogic.Instance.Model;
             UpdateStatus();
         }
 
-        /// <summary>
-        /// Stores current game state to a file
-        /// </summary>
-        private void StoreState()
-        {
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
-
-			using (IsolatedStorageFileStream stream = store.CreateFile(gameStateFile))
-			{
-				using (BinaryWriter writer = new BinaryWriter(stream))
-				{
-
-			        writer.Write((Int32)gameState);
-					writer.Write(game.PlayerMoves);
-					writer.Write((Int64)gameTimeElapsed.Ticks);
-
-					// Contents of the cells
-					for (int row = 0; row < GameLogic.RowLength; row++)
-					{
-						for (int col = 0; col < GameLogic.ColumnLength; col++)
-						{
-							writer.Write(game.Model.BoardNumbers[row][col].Value);
-							writer.Write(game.Model.BoardNumbers[row][col].SetByGame);
-						}
-					}
-				}
-			}
-        }
+        
 
         /// <summary>
         /// Event handler for orientation changes.

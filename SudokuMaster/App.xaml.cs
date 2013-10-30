@@ -107,7 +107,7 @@ namespace Balda
                 System.Diagnostics.Debugger.Break();
             }
         }
-
+        
         #region Phone application initialization
 
         // Avoid double-initialization

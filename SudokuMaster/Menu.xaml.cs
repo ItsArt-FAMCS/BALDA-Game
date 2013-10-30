@@ -15,13 +15,22 @@ namespace balda
         public Menu()
         {
             InitializeComponent();
-            NewGameButton.Click += new RoutedEventHandler(Switch_Click);
+            NewGameButton.Click += new RoutedEventHandler(NewGame);
+            SettingsButton.Click += new RoutedEventHandler(Settings);
         }
 
-        void Switch_Click(object sender, RoutedEventArgs e)
+        void NewGame(object sender, RoutedEventArgs e)
         {
             PageSwitch ps = this.Parent as PageSwitch;
             ps.Navigate(new Balda.MainPage());
+            //Uri uri = new Uri("//MainPage.xaml");
+            //(Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+        }
+
+        void Settings(object sender, RoutedEventArgs e)
+        {
+            PageSwitch ps = this.Parent as PageSwitch;
+            ps.Navigate(new Settings());
         }
     }
 }
