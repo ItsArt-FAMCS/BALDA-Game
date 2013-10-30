@@ -99,8 +99,14 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MemoryDiagnosticsControl.cs" />
+    <Compile Include="Menu.xaml.cs">
+      <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NumberSelection.xaml.cs">
       <DependentUpon>NumberSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PageSwitch.xaml.cs">
+      <DependentUpon>PageSwitch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Point.cs" />
     <Compile Include="Processor\BaldaProcessor.cs" />
@@ -143,11 +149,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NumberSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PageSwitch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WaitNote.xaml">
       <SubType>Designer</SubType>

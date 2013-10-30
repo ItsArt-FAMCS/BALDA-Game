@@ -97,6 +97,7 @@ namespace Balda
             // if the application was deactivated earlier.
             PhoneApplicationService.Current.Deactivated += new EventHandler<DeactivatedEventArgs>(App_Deactivated);
             RestoreState();
+            NewGame();
         }
 
         /// <summary>
