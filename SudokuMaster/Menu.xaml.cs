@@ -21,16 +21,18 @@ namespace balda
 
         void NewGame(object sender, RoutedEventArgs e)
         {
-            PageSwitch ps = this.Parent as PageSwitch;
-            ps.Navigate(new Balda.MainPage());
-            //Uri uri = new Uri("//MainPage.xaml");
-            //(Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
+             //PageSwitch ps = this.Parent as PageSwitch;
+            // ps.Navigate(new Balda.MainPage());
+            Uri uri = new Uri("//MainPage.xaml", UriKind.Relative);
+            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
         }
 
         void Settings(object sender, RoutedEventArgs e)
         {
-            PageSwitch ps = this.Parent as PageSwitch;
-            ps.Navigate(new Settings());
+            //PageSwitch ps = this.Parent as PageSwitch;
+           // ps.Navigate(new Settings());
+            Uri uri = new Uri("//Settings.xaml", UriKind.Relative);
+            (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
         }
     }
 }

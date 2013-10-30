@@ -19,16 +19,10 @@ namespace balda
         public Settings()
         {
             InitializeComponent();
-            BackButton.Click += new RoutedEventHandler(BackToMenu);
+            
         }
 
-        void BackToMenu(object sender, RoutedEventArgs e)
-        {
-            PageSwitch ps = this.Parent as PageSwitch;
-            ps.Navigate(new Menu());
-            //Uri uri = new Uri("//MainPage.xaml");
-            //(Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
-        }
+        
 
         private void Oponent_Click(object sender, RoutedEventArgs e)
         {

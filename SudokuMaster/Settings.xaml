@@ -30,7 +30,6 @@
             <Button x:Name="Oponent" Content="Играть против компьютера" HorizontalAlignment="Left" Height="146" Margin="10,73,0,0" VerticalAlignment="Top" Width="413" Click="Oponent_Click"/>
             <Button x:Name="Difficulty" Content="Средняя сложность" HorizontalAlignment="Left" Height="146" Margin="10,224,0,0" VerticalAlignment="Top" Width="413" Click="Difficulty_Click"/>
             <Button x:Name="BoardSize" Content="Поле 7х7" HorizontalAlignment="Left" Height="146" Margin="10,375,0,0" VerticalAlignment="Top" Width="413" Click="BoardSize_Click"/>
-            <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" Height="126" Margin="10,508,0,0" VerticalAlignment="Top" Width="413"/>
         </Grid>
     </Grid>
 
