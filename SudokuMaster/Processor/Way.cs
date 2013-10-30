@@ -68,6 +68,8 @@ namespace Balda.Processor
             }
         }
 
+        public bool StopSearch { get; set; }
+
         public Field First { get; set; }
         public Field Last { get; set; }
 

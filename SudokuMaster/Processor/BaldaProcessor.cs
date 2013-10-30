@@ -15,7 +15,7 @@ namespace Balda.Processor
     class BaldaProcessor
     {
         public const int KeyLength = 4;
-        public const int Size = 7;
+        public static int Size;
         public const int AdaptiveDelta = 2;
         public const string Alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
@@ -28,21 +28,22 @@ namespace Balda.Processor
         protected BaldaProcessor() { }
 
         //Fields
-        private List<string> Words { get; set; }
+        public List<string> Words { get; set; }
         private Dictionary<string, List<string>> LongWordsContainer { get; set; }
         private List<string> ShortWordsContainer { get; set; }
-        private static DifficultyLevel Difficulty { get; set; }
-        private static int MembersPoints { get; set; }
-        private static int AIPoints { get; set; }
+        private DifficultyLevel Difficulty { get; set; }
+        public int MembersPoints { get; set; }
+        public int AIPoints { get; set; }
         private static Random random { get; set; }
 
-        private Field[,] Desk { get; set; }
+        public Field[,] Desk { get; private set; }
 
         public List<string> Used { get; set; }
 
-        public string Initialize(String words, DifficultyLevel difficulty = DifficultyLevel.Addaptive)
+        public string Initialize(String words, DifficultyLevel difficulty = DifficultyLevel.Addaptive, int size = 7)
         {
             InitializeDictionaries(words);
+            Size = size;
             random = new Random();
             return Restart(difficulty);
         }
@@ -75,14 +76,42 @@ namespace Balda.Processor
             return startword;
         }
 
+        private bool NeedShort()
+        {
+            bool result = false;
+            switch (Difficulty)
+            {
+                case DifficultyLevel.Easy:
+                    result = true;
+                    break;
+                case DifficultyLevel.Addaptive:
+                    if (AIPoints + KeyLength - MembersPoints > AdaptiveDelta)
+                    {
+                        result = true;
+                    }
+                    else if (Math.Abs(MembersPoints - AIPoints - KeyLength) <= AdaptiveDelta)
+                    {
+                        if (random.NextDouble() < 0.5)
+                        {
+                            result = true;
+                        }
+                    }
+                    break;
+            }
+            return result;
+        }
+
         public WayView AIProcess()
         {
             Way result = null;
+
+            var needShort = NeedShort();
+            var stopSearch = false;
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    if (Desk[i, j].Value == ' ')
+                    if (Desk[i, j].Value == ' ' && !stopSearch)
                     {
                         foreach (var letter in Alphabet)
                         {
@@ -90,7 +119,13 @@ namespace Balda.Processor
                             {
                                 Value = letter
                             };
-                            var way = GetBestWay(startField);
+                            var way = GetBestWay(startField, needShort);
+                            if (way != null && way.StopSearch)
+                            {
+                                result = way;
+                                stopSearch = true;
+                                break;
+                            }
                             if (way != null && (result == null || result.Text.Length < way.Text.Length))
                             {
                                 result = way;
@@ -228,7 +263,7 @@ namespace Balda.Processor
             return result;
         }
 
-        protected Way GetBestWay(Field start)
+        protected Way GetBestWay(Field start, bool needShort = false)
         {
             //Get Start Keys
             var ways = GetStartWays(start);
@@ -254,23 +289,10 @@ namespace Balda.Processor
                     result = way;
                 }
             }
-            if (Difficulty == DifficultyLevel.Easy && result != null)
+            if (needShort && result != null)
             {
+                result.StopSearch = true;
                 return result;
-            }
-            if (Difficulty == DifficultyLevel.Addaptive && result != null)
-            {
-                if (Math.Abs(MembersPoints - AIPoints - KeyLength) <= AdaptiveDelta)
-                {
-                    if (random.NextDouble() < 0.5)
-                    {
-                        return result;
-                    }
-                }
-                else if (MembersPoints < AIPoints)
-                {
-                    return result;
-                }
             }
             //Поиск в ширину, короче
             while (ways.Count > 0)
