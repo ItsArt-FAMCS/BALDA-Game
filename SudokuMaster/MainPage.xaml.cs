@@ -382,7 +382,7 @@ namespace Balda
                     started = false;
                     if (!GameLogic.Instance.compOponent)
                     {
-                        if(secondPlayer)
+                        if (secondPlayer)
                         {
                             computerTextBOx.Text = finalWord;
                             cScore += finalWord.Length;
@@ -397,6 +397,12 @@ namespace Balda
                             secondPlayer = true;
                         }
 
+                    }
+                    else
+                    {
+                        playerTextBox.Text = finalWord;
+                        pScore += finalWord.Length;
+                        playerScore.Text = pScore.ToString();
                     }
                     bProc.AddWord(finalWord, new Processor.Field((int)newLetter.GetValue(Grid.RowProperty), (int)newLetter.GetValue(Grid.ColumnProperty))
                             {
