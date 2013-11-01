@@ -27,9 +27,8 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button x:Name="Oponent" Content="Играть против компьютера" HorizontalAlignment="Left" Height="146" Margin="10,73,0,0" VerticalAlignment="Top" Width="413" Click="Oponent_Click"/>
-            <Button x:Name="Difficulty" Content="Средняя сложность" HorizontalAlignment="Left" Height="146" Margin="10,224,0,0" VerticalAlignment="Top" Width="413" Click="Difficulty_Click"/>
-            <Button x:Name="BoardSize" Content="Поле 7х7" HorizontalAlignment="Left" Height="146" Margin="10,375,0,0" VerticalAlignment="Top" Width="413" Click="BoardSize_Click"/>
+            <Button x:Name="Difficulty" Content="Средняя сложность" HorizontalAlignment="Left" Height="146" Margin="19,48,0,0" VerticalAlignment="Top" Width="413" Click="Difficulty_Click"/>
+            <Button x:Name="BoardSize" Content="Поле 7х7" HorizontalAlignment="Left" Height="146" Margin="19,235,0,0" VerticalAlignment="Top" Width="413" Click="BoardSize_Click"/>
         </Grid>
     </Grid>
 

@@ -24,20 +24,7 @@ namespace balda
 
         
 
-        private void Oponent_Click(object sender, RoutedEventArgs e)
-        {
-            if (isComp)
-            {
-                Oponent.Content = "Играть против игрока";
-                GameLogic.Instance.compOponent = false;
-                isComp = false;
-            }
-            else {
-                Oponent.Content = "Играть против компьютера";
-                GameLogic.Instance.compOponent = true;
-                isComp = true;
-            }
-        }
+        
 
         private void BoardSize_Click(object sender, RoutedEventArgs e)
         {
