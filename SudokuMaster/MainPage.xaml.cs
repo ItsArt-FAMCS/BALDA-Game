@@ -155,13 +155,7 @@ namespace Balda
                 DataContext = null;
 
                 // Puzzle generation takes couple of seconds, do it in another thread
-                ThreadPool.QueueUserWorkItem(dummy =>
-                {
-                    // generating puzzle doesn't touch UI so it can run on another thread
-                    
-
-                    // switching to UI thread to modify UI components
-                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                ThreadPool.QueueUserWorkItem(dummy => Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
                         GameLogic.Instance.GeneratePuzzle(word);
                         DataContext = GameLogic.Instance.Model; // let's turn on databinding again
@@ -171,8 +165,7 @@ namespace Balda
                         UpdateStatus();
                         waitIndicator.Visibility = System.Windows.Visibility.Collapsed;
                         waitIndicator.StopSpin();
-                    });
-                });
+                    }));
             //});
             
         }
