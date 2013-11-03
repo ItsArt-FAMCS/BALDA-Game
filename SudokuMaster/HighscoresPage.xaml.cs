@@ -45,8 +45,8 @@ namespace Balda
             {
                 for (int i = 1; i <= 20; i++)
                 {
-                    scores.Add(new HighscoreItem(i, "Balda",
-                        new TimeSpan(0, 59, 59), 100));
+                    //scores.Add(new HighscoreItem(i, "Balda",
+                       // new TimeSpan(0, 59, 59), 100));
                 }
                 Save();
                 return;
@@ -88,19 +88,19 @@ namespace Balda
         /// </summary>
         /// <param name="score">Score to check. The score should contain at least the solving time and moves.</param>
         /// <returns>The position in highscore list, or zero if the score doesn't make it to the list</returns>
-        static public int IsNewHighscore(HighscoreItem score)
-        {
-            foreach (HighscoreItem item in scores)
-            {
-                // Check the time, and if the times are the same, check the
-                // moves needed to solve the puzzle
-                if (score.Time < item.Time ||
-                    (score.Time == item.Time && score.Moves < item.Moves))
-                    return item.Index;
-            }
+        //static public int IsNewHighscore(HighscoreItem score)
+        //{
+        //    foreach (HighscoreItem item in scores)
+        //    {
+        //        // Check the time, and if the times are the same, check the
+        //        // moves needed to solve the puzzle
+        //        if (score.Time < item.Time ||
+        //            //(score.Time == item.Time && score.Moves < item.Moves))
+        //           // return item.Index;
+        //    }
 
-            return 0;
-        }
+        //    return 0;
+        //}
 
         /// <summary>
         /// Add a new score to highscore list

@@ -31,26 +31,44 @@ namespace Balda
         public GameOver(HighscoreItem playerScore)
         {
             InitializeComponent();
-            
+            if (GameLogic.Instance.compOponent)
+            {
+                if (playerScore.player1 > playerScore.player2)
+                {
+                    textBlockHeading.Text = "Вы победили!";
+                }
+                else if (playerScore.player1 < playerScore.player2)
+                {
+                    textBlockHeading.Text = "Вы проиграли :( Попробуйте ещё раз.";
+                }
+                else
+                {
+                    textBlockHeading.Text = "Ничья.";
+                }
+            }
+            else
+            {
+                if (playerScore.player1 > playerScore.player2)
+                {
+                    textBlockHeading.Text = "Первый игрок победил!";
+                }
+                else if (playerScore.player1 < playerScore.player2)
+                {
+                    textBlockHeading.Text = "Второй игрок победил!";
+                }
+                else
+                {
+                    textBlockHeading.Text = "Ничья.";
+                }
+            }
             // Start the fade in animation
             fadeInAnimation.Begin();
 
             // Show the position textblock and player name textbox only if the
             // score is good enough to make it to the list.
             score = playerScore;
-            int position = Highscores.IsNewHighscore(score);
-            score.Index = position;
-            if (position > 0)
-            {
-                playerName.Visibility = Visibility.Visible;
-                textBlockPlacement.Text = "Your placement is " + position.ToString();
-            }
-            else
-            {
-                playerName.Visibility = Visibility.Collapsed;
-                ConfirmButton.Content = "Ok";
-                textBlockPlacement.Text = "";
-            }
+           // int position = Highscores.IsNewHighscore(score);
+            //score.Index = position;
 
             textBlockTime.Text = "Your time was " + score.Time.ToString();
         }

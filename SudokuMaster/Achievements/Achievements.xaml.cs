@@ -16,5 +16,12 @@ namespace balda
         {
             InitializeComponent();
         }
+
+       // public bool EasyOponentAchiev()
+        //{
+
+        //}
     }
+
+ 
 }

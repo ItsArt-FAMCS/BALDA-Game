@@ -79,6 +79,10 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Achievements\Achievements.xaml.cs">
+      <DependentUpon>Achievements.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Achievements\AchievementsProcessor.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -128,6 +132,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Achievements\Achievements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Cell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -184,6 +192,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Achievements\Achievements.txt" />
     <Content Include="ApplicationIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -190,23 +190,22 @@ namespace Balda
         {
             gameTimer.Stop();
 
-            // Blink all cells and prevent the player from modifying the cells
-            for (int row = 0; row < GameLogic.Instance.size; row++)
-            {
-                for (int col = 0; col < GameLogic.Instance.size; col++)
-                {
-					GameLogic.Instance.Model.BoardNumbers[row][col].SetByGame = true; // to block the user input
-                    cells[row][col].Blink();
-                }
-            }
+            //// Blink all cells and prevent the player from modifying the cells
+            //for (int row = 0; row < GameLogic.Instance.size; row++)
+            //{
+            //    for (int col = 0; col < GameLogic.Instance.size; col++)
+            //    {
+            //        GameLogic.Instance.Model.BoardNumbers[row][col].SetByGame = true; // to block the user input
+            //        cells[row][col].Blink();
+            //    }
+            //}
 
             // Display the score with GameOver dialog
             HighscoreItem score = new HighscoreItem();
             score.Time = new TimeSpan(gameTimeElapsed.Days, gameTimeElapsed.Hours,
                 gameTimeElapsed.Minutes, gameTimeElapsed.Seconds, 0);
-            score.Moves = GameLogic.Instance.PlayerMoves;
-
-
+            score.player1 = pScore;
+            score.player2 = cScore;
 			//TODO: move this to XAML
             GameOver gameOver = new GameOver(score);
             // Main page is divided into 2x3 grid. Make sure the row and column
@@ -391,6 +390,8 @@ namespace Balda
                         pScore += finalWord.Length;
                         playerScore.Text = pScore.ToString();
                     }
+                    if (bProc.IsGameOver())
+                        GameEnds();
                     bProc.AddWord(finalWord, new Processor.Field((int)newLetter.GetValue(Grid.RowProperty), (int)newLetter.GetValue(Grid.ColumnProperty))
                             {
                                 Value = newLetter.Value
@@ -405,7 +406,8 @@ namespace Balda
 
                     if (GameLogic.Instance.compOponent)
                         AIMove();
-                    
+                    if (bProc.IsGameOver())
+                        GameEnds();
                     
                 }
                 else

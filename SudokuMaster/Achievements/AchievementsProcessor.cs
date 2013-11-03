@@ -5,7 +5,9 @@ using System.Text;
 
 namespace balda
 {
-    class AchievementsProcessor
+    static class AchievementsProcessor
     {
+
+
     }
 }

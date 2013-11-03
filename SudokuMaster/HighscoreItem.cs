@@ -15,7 +15,8 @@ namespace Balda
 	{
 		public int Index { get; set; }
 		public string Name { get; set; }
-		public int Moves { get; set; }
+		public int player1 { get; set; }
+        public int player2 { get; set; }
 
 		// XmlSerializer cannot serialize TimeSpans. Tell the serializer to
 		// ignore Time, and (de)serialize the Time as string instead. 
@@ -47,12 +48,12 @@ namespace Balda
 		/// <param name="playerName">Player's name</param>
 		/// <param name="solvingTime">Time needed to solve the puzzle</param>
 		/// <param name="playerMoves">Moves needed to solve the puzzle</param>
-		public HighscoreItem(int scoreIndex, string playerName, TimeSpan solvingTime, int playerMoves)
+		public HighscoreItem(TimeSpan solvingTime, int p1, int p2)
 		{
-			Index = scoreIndex;
-			Name = playerName;
+            player1 = p1;
+            player2 = p2;
 			Time = solvingTime;
-			Moves = playerMoves;
+			
 		}
 	}
 }
