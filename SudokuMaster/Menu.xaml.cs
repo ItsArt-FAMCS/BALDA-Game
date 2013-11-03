@@ -22,8 +22,6 @@ namespace balda
 
         void NewGame(object sender, RoutedEventArgs e)
         {
-             //PageSwitch ps = this.Parent as PageSwitch;
-            // ps.Navigate(new Balda.MainPage());
             Balda.GameLogic.Instance.compOponent = true;
             Uri uri = new Uri("//MainPage.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
@@ -31,8 +29,6 @@ namespace balda
 
         void NewPlayerGame(object sender, RoutedEventArgs e)
         {
-            //PageSwitch ps = this.Parent as PageSwitch;
-            // ps.Navigate(new Balda.MainPage());
             Balda.GameLogic.Instance.compOponent = false;
             Uri uri = new Uri("//MainPage.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
@@ -40,8 +36,6 @@ namespace balda
 
         void Settings(object sender, RoutedEventArgs e)
         {
-            //PageSwitch ps = this.Parent as PageSwitch;
-           // ps.Navigate(new Settings());
             Uri uri = new Uri("//Settings.xaml", UriKind.Relative);
             (Application.Current.RootVisual as PhoneApplicationFrame).Navigate(uri);
         }

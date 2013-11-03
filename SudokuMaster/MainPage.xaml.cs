@@ -58,8 +58,6 @@ namespace Balda
            // Deployment.Current.Dispatcher.BeginInvoke(() =>
            // {
                 InitializeComponent();
-
-
                 gameTimer = new DispatcherTimer();
                 gameTimer.Interval = TimeSpan.FromSeconds(1);
                 gameTimer.Tick += StatusTimerTick;
@@ -239,7 +237,6 @@ namespace Balda
 			bool lightCell = false;
             int size = GameLogic.Instance.size;
 			Cell[][] cells = new Cell[size][];
-          //  chars = new char[size, size];
             listOfCoords = new List<Cell>();
             for (int row = 0; row < size; row++)
 			{
@@ -321,8 +318,8 @@ namespace Balda
                 Cell cell = sender as Cell;
                 if (previousCell != null)
                 {
-                    if (Math.Abs((int)previousCell.GetValue(Grid.RowProperty) - (int)cell.GetValue(Grid.RowProperty)) == 1
-                        || Math.Abs((int)previousCell.GetValue(Grid.ColumnProperty) - (int)cell.GetValue(Grid.ColumnProperty)) == 1)
+                    if (Math.Abs((int)previousCell.GetValue(Grid.RowProperty) - (int)cell.GetValue(Grid.RowProperty)) == 0
+                        || Math.Abs((int)previousCell.GetValue(Grid.ColumnProperty) - (int)cell.GetValue(Grid.ColumnProperty)) == 0)
                     {
                         if (cell == newLetter)
                             containsNewLetter = true;

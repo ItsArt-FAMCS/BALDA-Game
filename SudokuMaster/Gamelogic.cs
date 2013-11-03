@@ -17,7 +17,7 @@ namespace Balda
     public class GameLogic
     {
 		public BoardModel Model { get; private set; }
-
+        private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
         public const int WordLength = 7;
 		public const int BlocksPerSide = 3;
         public Processor.DifficultyLevel dificulty = Processor.DifficultyLevel.Addaptive; //normal diff by default
@@ -137,5 +137,11 @@ namespace Balda
             Model.BoardNumbers[x][y].Value = value;
             return null;
         }
+
+        public void AIMove()
+        {
+
+        }
+
     }
 }
