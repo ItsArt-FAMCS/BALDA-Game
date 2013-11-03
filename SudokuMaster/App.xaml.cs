@@ -34,7 +34,7 @@ namespace Balda
         public App()
         {
             // Global handler for uncaught exceptions. 
-            UnhandledException += Application_UnhandledException;
+           // UnhandledException += Application_UnhandledException;
 
             // Show graphics profiling information while debugging.
             if (System.Diagnostics.Debugger.IsAttached)
@@ -99,14 +99,14 @@ namespace Balda
         }
 
         // Code to execute on Unhandled Exceptions
-        private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
-        {
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                // An unhandled exception has occurred; break into the debugger
-                System.Diagnostics.Debugger.Break();
-            }
-        }
+        //private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+        //{
+        //    if (System.Diagnostics.Debugger.IsAttached)
+        //    {
+        //        // An unhandled exception has occurred; break into the debugger
+        //        System.Diagnostics.Debugger.Break();
+        //    }
+        //}
         
         #region Phone application initialization
 

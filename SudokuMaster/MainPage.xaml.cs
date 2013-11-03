@@ -41,47 +41,39 @@ namespace Balda
         private DateTime gamePausedTime;
         private TimeSpan gameTimeElapsed;
 		private Cell[][] cells;
-        private char[,] chars;
         private int pScore = 0;
         private int cScore = 0;
         private bool secondPlayer = false;
         public List<string> usedWords = new List<string>();
         private bool containsNewLetter = false;
         private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
-        private struct Coords
-        {
-            public int x;
-            public int y;
-        }
         private List<Cell> listOfCoords;
         /// <summary>
         /// Constructor
         /// </summary>
         /// 
-        
         public MainPage()
         {
-            InitializeComponent();
 
-            // Initialize the grid and instantiate the logic
+           // Deployment.Current.Dispatcher.BeginInvoke(() =>
+           // {
+                InitializeComponent();
+
+
+                gameTimer = new DispatcherTimer();
+                gameTimer.Interval = TimeSpan.FromSeconds(1);
+                gameTimer.Tick += StatusTimerTick;
+
+                gamePausedTime = new DateTime();
+
+                cells = CreateGrid();
+                // For tombstoning; listen for deactivated event and restore state
+                // if the application was deactivated earlier.
+                PhoneApplicationService.Current.Deactivated += new EventHandler<DeactivatedEventArgs>(App_Deactivated);
+                RestoreState();
+                NewGame();
+          //  });
             
-            
-            //dodod
-            
-           // game = new GameLogic();
-            gameTimer = new DispatcherTimer();
-            gameTimer.Interval = TimeSpan.FromSeconds(1);
-            gameTimer.Tick += StatusTimerTick;
-
-            gamePausedTime = new DateTime();
-
-			cells = CreateGrid();
-
-            // For tombstoning; listen for deactivated event and restore state
-            // if the application was deactivated earlier.
-            PhoneApplicationService.Current.Deactivated += new EventHandler<DeactivatedEventArgs>(App_Deactivated);
-            RestoreState();
-            NewGame();
         }
 
         /// <summary>
@@ -91,7 +83,7 @@ namespace Balda
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             if (gameState == GameState.Ongoing && gamePausedTime > gameStartTime)
-            {
+           {
                 gameStartTime += DateTime.Now - gamePausedTime;
                 UpdateStatus();
             }           
@@ -147,37 +139,42 @@ namespace Balda
         /// </summary>
         private void NewGame()
         {
-            // Close the GameOver dialog if it was still active
-            GameOver gameOver = LayoutRoot.Children.OfType<GameOver>().SingleOrDefault();
-            LayoutRoot.Children.Remove(gameOver);
+           // Deployment.Current.Dispatcher.BeginInvoke(() =>
+           // {
+                // Close the GameOver dialog if it was still active
+                GameOver gameOver = LayoutRoot.Children.OfType<GameOver>().SingleOrDefault();
+                LayoutRoot.Children.Remove(gameOver);
 
-			numberSelection.Visibility = System.Windows.Visibility.Collapsed;
+                numberSelection.Visibility = System.Windows.Visibility.Collapsed;
 
-			// Display wait note (spinning circle)
-			waitIndicator.Visibility = System.Windows.Visibility.Visible;
-			waitIndicator.StartSpin();
+                // Display wait note (spinning circle)
+                waitIndicator.Visibility = System.Windows.Visibility.Visible;
+                waitIndicator.StartSpin();
 
-			// Disable databinding while generating puzzle
-			DataContext = null;
+                // Disable databinding while generating puzzle
+                DataContext = null;
+
+                // Puzzle generation takes couple of seconds, do it in another thread
+                ThreadPool.QueueUserWorkItem(dummy =>
+                {
+                    // generating puzzle doesn't touch UI so it can run on another thread
+                    
+
+                    // switching to UI thread to modify UI components
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        GameLogic.Instance.GeneratePuzzle(word);
+                        DataContext = GameLogic.Instance.Model; // let's turn on databinding again
+                        gameTimer.Start();
+                        gameStartTime = DateTime.Now;
+                        gameState = GameState.Ongoing;
+                        UpdateStatus();
+                        waitIndicator.Visibility = System.Windows.Visibility.Collapsed;
+                        waitIndicator.StopSpin();
+                    });
+                });
+            //});
             
-			// Puzzle generation takes couple of seconds, do it in another thread
-			ThreadPool.QueueUserWorkItem(dummy =>
-				{
-					// generating puzzle doesn't touch UI so it can run on another thread
-                    GameLogic.Instance.GeneratePuzzle(word);
-
-					// switching to UI thread to modify UI components
-					Deployment.Current.Dispatcher.BeginInvoke(() =>
-						{
-							DataContext = GameLogic.Instance.Model; // let's turn on databinding again
-							gameTimer.Start();
-							gameStartTime = DateTime.Now;
-							gameState = GameState.Ongoing;
-							UpdateStatus();
-							waitIndicator.Visibility = System.Windows.Visibility.Collapsed;
-							waitIndicator.StopSpin();
-						});
-				});
         }
 
         /// <summary>
@@ -203,9 +200,9 @@ namespace Balda
             gameTimer.Stop();
 
             // Blink all cells and prevent the player from modifying the cells
-            for (int row = 0; row < GameLogic.RowLength; row++)
+            for (int row = 0; row < GameLogic.Instance.size; row++)
             {
-                for (int col = 0; col < GameLogic.ColumnLength; col++)
+                for (int col = 0; col < GameLogic.Instance.size; col++)
                 {
 					GameLogic.Instance.Model.BoardNumbers[row][col].SetByGame = true; // to block the user input
                     cells[row][col].Blink();
@@ -249,7 +246,7 @@ namespace Balda
 			bool lightCell = false;
             int size = GameLogic.Instance.size;
 			Cell[][] cells = new Cell[size][];
-            chars = new char[size, size];
+          //  chars = new char[size, size];
             listOfCoords = new List<Cell>();
             for (int row = 0; row < size; row++)
 			{
@@ -267,7 +264,7 @@ namespace Balda
 					c.SetValue(Grid.RowProperty, row);
 					c.SetValue(Grid.ColumnProperty, col);
 					c.BackgroundImage.Source = lightCell ? lightImage : darkImage;
-                   
+                    
                     // install event handler
 					c.MouseLeftButtonDown += new MouseButtonEventHandler(OnCellTouched);
                     c.MouseEnter += new MouseEventHandler(OnCellEnter);
@@ -549,7 +546,6 @@ namespace Balda
             UpdateStatus();
         }
 
-        
 
         /// <summary>
         /// Event handler for orientation changes.

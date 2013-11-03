@@ -13,7 +13,6 @@ namespace balda
 {
     public partial class Settings : PhoneApplicationPage
     {
-        private bool isComp = true;
         private bool isDefaultBoard = true;
         private Balda.Processor.DifficultyLevel diff = Balda.Processor.DifficultyLevel.Addaptive;
         public Settings()

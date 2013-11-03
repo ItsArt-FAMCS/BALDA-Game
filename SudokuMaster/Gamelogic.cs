@@ -20,9 +20,6 @@ namespace Balda
 
         public const int WordLength = 7;
 		public const int BlocksPerSide = 3;
-		public const int RowLength = WordLength;
-		public const int ColumnLength = WordLength;
-		public const int MaxEmptyCells = 45;
         public Processor.DifficultyLevel dificulty = Processor.DifficultyLevel.Addaptive; //normal diff by default
         public int size = 7;
         public bool compOponent = true;
@@ -30,7 +27,7 @@ namespace Balda
         protected bool solutionFound = false;
 		private char[][] copyCells;
         protected Random randGen = new Random();
-
+        public MainPage GameObj;
         public int EmptyCells { get; set; }
         public int PlayerMoves { get; set; }
 
@@ -80,13 +77,13 @@ namespace Balda
         /// </summary>
         private void MakeCopy()
         {
-			copyCells = new char[RowLength][];
+			copyCells = new char[size][];
 
-			for (int i = 0; i < RowLength; i++)
+            for (int i = 0; i < size; i++)
 			{
-				copyCells[i] = new char[ColumnLength];
+                copyCells[i] = new char[size];
 
-				for (int j = 0; j < ColumnLength; j++)
+                for (int j = 0; j < size; j++)
 					copyCells[i][j] = Model.BoardNumbers[i][j].Value;
 			}
         }
@@ -119,7 +116,7 @@ namespace Balda
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
 					Model.BoardNumbers[i][j].Value = ' ';
-
+            
             string text = ReadFile("dict/1.txt");
             string word = Processor.BaldaProcessor.Instance.Initialize(text, dificulty);
             
