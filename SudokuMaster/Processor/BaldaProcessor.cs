@@ -40,17 +40,32 @@ namespace Balda.Processor
 
         public List<string> Used { get; set; }
 
+        public bool IsGameOver()
+        {
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    if (Desk[i, j].Value == ' ')
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public string Initialize(String words, DifficultyLevel difficulty = DifficultyLevel.Addaptive, int size = 7)
         {
             InitializeDictionaries(words);
             Size = size;
+            Difficulty = difficulty;
             random = new Random();
-            return Restart(difficulty);
+            return Restart();
         }
 
-        public string Restart(DifficultyLevel difficulty)
+        public string Restart()
         {
-            Difficulty = difficulty;
             MembersPoints = 0;
             AIPoints = 0;
 
