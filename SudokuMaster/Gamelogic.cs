@@ -118,7 +118,7 @@ namespace Balda
 					Model.BoardNumbers[i][j].Value = ' ';
             
             string text = ReadFile("dict/1.txt");
-            string word = Processor.BaldaProcessor.Instance.Initialize(text, dificulty);
+            string word = Processor.BaldaProcessor.Instance.Initialize(text, dificulty, size);
             
             for (int i = 0; i < size; i++)
             {

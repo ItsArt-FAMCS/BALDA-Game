@@ -18,7 +18,21 @@ namespace balda
         public Settings()
         {
             InitializeComponent();
-            
+            if (GameLogic.Instance.size == 5)
+            {
+                BoardSize.Content = "Поле 5х5";
+                isDefaultBoard = false;
+            }
+            if (GameLogic.Instance.dificulty == Balda.Processor.DifficultyLevel.Easy)
+            {
+                diff = Balda.Processor.DifficultyLevel.Easy;
+                Difficulty.Content = "Легко";
+            }
+            else if (GameLogic.Instance.dificulty == Balda.Processor.DifficultyLevel.Insane)
+            {
+                diff = Balda.Processor.DifficultyLevel.Insane;
+                Difficulty.Content = "Невозможно";
+            }
         }
 
         
