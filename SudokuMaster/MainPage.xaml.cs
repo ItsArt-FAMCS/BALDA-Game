@@ -317,8 +317,8 @@ namespace Balda
                 Cell cell = sender as Cell;
                 if (previousCell != null)
                 {
-                    if (Math.Abs((int)previousCell.GetValue(Grid.RowProperty) - (int)cell.GetValue(Grid.RowProperty)) == 0
-                        || Math.Abs((int)previousCell.GetValue(Grid.ColumnProperty) - (int)cell.GetValue(Grid.ColumnProperty)) == 0)
+                    if (Math.Abs((int)previousCell.GetValue(Grid.RowProperty) - (int)cell.GetValue(Grid.RowProperty)) +
+                         Math.Abs((int)previousCell.GetValue(Grid.ColumnProperty) - (int)cell.GetValue(Grid.ColumnProperty)) == 1)
                     {
                         if (cell == newLetter)
                             containsNewLetter = true;
