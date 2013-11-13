@@ -210,7 +210,7 @@ namespace Balda
         /// </summary>
         private void GameEnds()
         {
-            gameTimer.Stop();
+            //gameTimer.Stop();
             bool won = pScore > cScore ? true : false;
             achProc.gameEnded(GameLogic.Instance.dificulty, won);
             //// Blink all cells and prevent the player from modifying the cells
@@ -386,11 +386,12 @@ namespace Balda
             {
                 string finalWord = word;
                 word = "";
-                achProc.wordPicked(finalWord);
+                
                 
 
                 if (bProc.IsLegalWord(finalWord) && containsNewLetter)
                 {
+                    achProc.wordPicked(finalWord);
                     letterPicked = false;
                     started = false;
                     if (!GameLogic.Instance.compOponent)

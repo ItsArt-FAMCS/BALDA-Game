@@ -79,8 +79,8 @@ namespace balda
             AchEventArgs args = new AchEventArgs();
             if (word.Length >= 5 && !fletters)
             {
-                args.ach.Add("\"Я умею использовать не только короткие слова!\"");
-                ftletters = true;
+                args.ach.Add("\"Я умею писать\"");
+                fletters = true;
                 st[0] = '1';
             }
 
