@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using balda.Achievements;
 
 namespace Balda
 {
@@ -45,25 +46,27 @@ namespace Balda
         private int cScore = 0;
         private bool secondPlayer = false;
         public List<string> usedWords = new List<string>();
+        public List<string> achList = new List<string>();
         private bool containsNewLetter = false;
         private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
         private List<Cell> listOfCoords;
+        private balda.Achievements.AchievmentGain achGain;
+        private balda.AchievementsProcessor achProc;
+        private balda.AchievementsListner achListner;
         /// <summary>
         /// Constructor
         /// </summary>
         /// 
         public MainPage()
         {
-
-           // Deployment.Current.Dispatcher.BeginInvoke(() =>
-           // {
                 InitializeComponent();
                 gameTimer = new DispatcherTimer();
                 gameTimer.Interval = TimeSpan.FromSeconds(1);
                 gameTimer.Tick += StatusTimerTick;
-
+                achProc = new balda.AchievementsProcessor();
+                achListner = new balda.AchievementsListner(achProc);
                 gamePausedTime = new DateTime();
-
+                
                 cells = CreateGrid();
                 // For tombstoning; listen for deactivated event and restore state
                 // if the application was deactivated earlier.
@@ -171,10 +174,29 @@ namespace Balda
         /// <summary>
         /// Updates status to UI; player moves, empty cells and game time
         /// </summary>
+        /// 
+        private System.DateTime achShowedTime;
         private void UpdateStatus()
         {
             gameTimeElapsed = DateTime.Now - gameStartTime;
-
+            if (achGain != null && (DateTime.Now - achShowedTime).TotalSeconds >= 3)
+            {
+                achGain.FadeOut();
+                achGain = null;
+            }
+            if (achListner.achQueue.Count() != 0 && achGain == null)
+            {
+                achGain = new AchievmentGain(achListner.achQueue[0]);
+                achGain.Visibility = System.Windows.Visibility.Visible;
+                achGain.SetValue(Grid.RowSpanProperty, 3);
+                achGain.SetValue(Grid.ColumnSpanProperty, 2);
+                achGain.SetValue(Grid.VerticalAlignmentProperty, VerticalAlignment.Top);
+                achGain.SetValue(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+                achGain.SetValue(MarginProperty, new Thickness(10, 0, 0, 0));
+                LayoutRoot.Children.Add(achGain);
+                achShowedTime = DateTime.Now;
+                achListner.achQueue.RemoveAt(0);
+            }
             GameTime.Text  = String.Format("{0:D1}:{1:D2}:{2:D2}",
                 gameTimeElapsed.Hours, gameTimeElapsed.Minutes, gameTimeElapsed.Seconds);
 
@@ -189,7 +211,8 @@ namespace Balda
         private void GameEnds()
         {
             gameTimer.Stop();
-
+            bool won = pScore > cScore ? true : false;
+            achProc.gameEnded(GameLogic.Instance.dificulty, won);
             //// Blink all cells and prevent the player from modifying the cells
             //for (int row = 0; row < GameLogic.Instance.size; row++)
             //{
@@ -211,6 +234,7 @@ namespace Balda
             // Main page is divided into 2x3 grid. Make sure the row and column
             // properties are set properly (position 0,0 with span 2,3) to make
             // the dialog visible anywhere on the page.
+            
             gameOver.SetValue(Grid.RowSpanProperty, 3);
             gameOver.SetValue(Grid.ColumnSpanProperty, 2);
             gameOver.SetValue(Grid.VerticalAlignmentProperty, VerticalAlignment.Center);
@@ -219,7 +243,7 @@ namespace Balda
 
             LayoutRoot.Children.Add(gameOver);
             gameState = GameState.GameOver;
-
+            
 			SoundHelper.PlaySound(SoundHelper.SoundType.GameEndSound);
         }
 
@@ -362,6 +386,9 @@ namespace Balda
             {
                 string finalWord = word;
                 word = "";
+                achProc.wordPicked(finalWord);
+                
+
                 if (bProc.IsLegalWord(finalWord) && containsNewLetter)
                 {
                     letterPicked = false;

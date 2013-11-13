@@ -70,17 +70,10 @@
                    Name="textBlockTime" Text="Your time was 00:00"
                    VerticalAlignment="Top" Width="436" FontSize="26"
                    TextAlignment="Center" />
-        <TextBlock Height="40" HorizontalAlignment="Center" Margin="12,158,14,0"
-                   Name="textBlockPlacement" Text="Your placement is 1"
-                   VerticalAlignment="Top" Width="434" FontSize="26"
-                   TextAlignment="Center" />
 
         <!-- And a textbox for the player's name -->
-        <TextBox Height="72" HorizontalAlignment="Left" Margin="12,196,0,0"
-                 Name="playerName" Text="Your name" VerticalAlignment="Top"
-                 Width="436" KeyDown="PlayerName_KeyDown" />
 
-        <Button Name="ConfirmButton" Content="Confirm" Height="74" Width="140" 
+        <Button Name="ConfirmButton" Content="OK" Height="74" Width="140" 
                 VerticalAlignment="Bottom" HorizontalAlignment="Center" Click="Button_Click" Style="{StaticResource ButtonStyle1}">            
         </Button>
 

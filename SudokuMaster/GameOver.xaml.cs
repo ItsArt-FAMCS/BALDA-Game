@@ -103,12 +103,6 @@ namespace Balda
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (score.Index > 0)
-            {
-                score.Name = playerName.Text;
-                Highscores.AddNewHighscore(score);
-                playerName.IsReadOnly = true;
-            }
             fadeOutAnimation.Begin();
         }
     }

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -30,7 +31,7 @@ namespace Balda
         public MainPage GameObj;
         public int EmptyCells { get; set; }
         public int PlayerMoves { get; set; }
-
+        public string achs;
         private static readonly GameLogic _instance = new GameLogic();
         public static GameLogic Instance
         {
@@ -39,6 +40,7 @@ namespace Balda
         protected GameLogic()
         {
 			Model = new BoardModel(size, size);
+            achs = ReadFile("achfile.txt");
         }
 
         
@@ -88,7 +90,20 @@ namespace Balda
 			}
         }
 
-      
+        public void WriteToFile(string filePath, string text)
+        {
+            
+            using (IsolatedStorageFile myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (myIsolatedStorage.FileExists(filePath))
+                    myIsolatedStorage.DeleteFile(filePath);
+                var stream = myIsolatedStorage.CreateFile(filePath);
+                using (StreamWriter isoStream = new StreamWriter(stream))
+                {
+                    isoStream.WriteLine(text);
+                }
+            }
+        }
 
         private string ReadFile(string filePath)
         {
