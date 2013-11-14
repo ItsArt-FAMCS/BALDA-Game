@@ -205,7 +205,7 @@ namespace Balda.Processor
 
         public void InitializeDictionaries()
         {
-            if (Words.Count != 0)
+            if (Words == null)
             {
                 var words = ReadFile("dict/1.txt");
                 InitializeDictionaries(words);
