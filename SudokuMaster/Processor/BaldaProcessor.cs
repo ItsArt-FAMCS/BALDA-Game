@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Balda.Processor
 {
@@ -55,9 +57,8 @@ namespace Balda.Processor
             return true;
         }
 
-        public string Initialize(String words, DifficultyLevel difficulty = DifficultyLevel.Addaptive, int size = 7)
+        public string InitializeGame(DifficultyLevel difficulty = DifficultyLevel.Addaptive, int size = 7)
         {
-            InitializeDictionaries(words);
             Size = size;
             Difficulty = difficulty;
             random = new Random();
@@ -187,7 +188,31 @@ namespace Balda.Processor
             return false;
         }
 
-        protected void InitializeDictionaries(String words)
+        private string ReadFile(string filePath)
+        {
+            var resrouceStream = Application.GetResourceStream(new Uri(filePath, UriKind.Relative));
+            if (resrouceStream != null)
+            {
+                var myFileStream = resrouceStream.Stream;
+                if (myFileStream.CanRead)
+                {
+                    var myStreamReader = new StreamReader(myFileStream);
+                    return myStreamReader.ReadToEnd();
+                }
+            }
+            return string.Empty;
+        }
+
+        public void InitializeDictionaries()
+        {
+            if (Words.Count != 0)
+            {
+                var words = ReadFile("dict/1.txt");
+                InitializeDictionaries(words);
+            }
+        }
+
+        private void InitializeDictionaries(String words)
         {
             Words = words.Split(new[] { ' ', '\r', '\n', '\t' }).Where(e => e != string.Empty).Select(e => e.ToLower().Trim()).ToList();
             LongWordsContainer = new Dictionary<string, List<string>>();

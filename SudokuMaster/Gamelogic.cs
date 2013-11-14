@@ -41,6 +41,7 @@ namespace Balda
         {
 			Model = new BoardModel(size, size);
             achs = ReadFile("achfile.txt");
+            Processor.BaldaProcessor.Instance.InitializeDictionaries();
         }
 
         
@@ -108,19 +109,19 @@ namespace Balda
         private string ReadFile(string filePath)
         {
             //this verse is loaded for the first time so fill it from the text file
-            var ResrouceStream = Application.GetResourceStream(new Uri(filePath, UriKind.Relative));
-            if (ResrouceStream != null)
+            var resrouceStream = Application.GetResourceStream(new Uri(filePath, UriKind.Relative));
+            if (resrouceStream != null)
             {
-                Stream myFileStream = ResrouceStream.Stream;
+                var myFileStream = resrouceStream.Stream;
                 if (myFileStream.CanRead)
                 {
-                    StreamReader myStreamReader = new StreamReader(myFileStream);
+                    var myStreamReader = new StreamReader(myFileStream);
 
                     //read the content here
                     return myStreamReader.ReadToEnd();
                 }
             }
-            return "NULL";
+            return string.Empty;
         }
 
         /// <summary>
@@ -131,9 +132,7 @@ namespace Balda
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
 					Model.BoardNumbers[i][j].Value = ' ';
-            
-            string text = ReadFile("dict/1.txt");
-            string word = Processor.BaldaProcessor.Instance.Initialize(text, dificulty, size);
+            string word = Processor.BaldaProcessor.Instance.InitializeGame(dificulty, size);
             
             for (int i = 0; i < size; i++)
             {
