@@ -70,8 +70,6 @@ namespace Balda.Processor
 
         public string Restart()
         {
-            lock (locker);
-
             MembersPoints = 0;
             AIPoints = 0;
 
@@ -124,6 +122,9 @@ namespace Balda.Processor
 
         public WayView AIProcess()
         {
+            lock (locker)
+            {
+            }
             Way result = null;
 
             var needShort = NeedShort();
