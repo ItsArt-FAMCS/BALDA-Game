@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 namespace Balda.Processor
@@ -16,6 +17,8 @@ namespace Balda.Processor
 
     class BaldaProcessor
     {
+        static object locker = new object();
+
         public const int KeyLength = 4;
         public static int Size;
         public const int AdaptiveDelta = 2;
@@ -67,6 +70,8 @@ namespace Balda.Processor
 
         public string Restart()
         {
+            lock (locker);
+
             MembersPoints = 0;
             AIPoints = 0;
 
@@ -207,8 +212,11 @@ namespace Balda.Processor
         {
             if (Words == null)
             {
-                var words = ReadFile("dict/1.txt");
-                InitializeDictionaries(words);
+                lock (locker)
+                {
+                    var words = ReadFile("dict/1.txt");
+                    InitializeDictionaries(words);
+                }
             }
         }
 

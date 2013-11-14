@@ -41,65 +41,17 @@ namespace Balda
         {
 			Model = new BoardModel(size, size);
             achs = ReadFile("achfile.txt");
-            Processor.BaldaProcessor.Instance.InitializeDictionaries();
-        }
-
-        
-        
-      
-
-        private bool TestLetter(int x, int y, char letter)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Tries to set the given number to the given index.
-        /// </summary>
-        /// <param name="x">X coordinate on the grid</param>
-        /// <param name="y">Y coordinate on the grid</param>
-        /// <param name="value">Number to set</param>
-        /// <param name="useCopy">Tells whether we use the main array or a copy of it</param>
-        /// <returns>true if it was possible, false otherwise.</returns>
-        private bool SetLetter(int x, int y, char letter, bool useCopy)
-        {
-            if (TestLetter(x, y, letter))
-            {
-				if (useCopy)
-					copyCells[x][y] = letter;
-				else
-					Model.BoardNumbers[x][y].Value = letter;
-
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Copies cell values from main array to the copy array
-        /// </summary>
-        private void MakeCopy()
-        {
-			copyCells = new char[size][];
-
-            for (int i = 0; i < size; i++)
-			{
-                copyCells[i] = new char[size];
-
-                for (int j = 0; j < size; j++)
-					copyCells[i][j] = Model.BoardNumbers[i][j].Value;
-			}
         }
 
         public void WriteToFile(string filePath, string text)
         {
             
-            using (IsolatedStorageFile myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
+            using (var myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 if (myIsolatedStorage.FileExists(filePath))
                     myIsolatedStorage.DeleteFile(filePath);
                 var stream = myIsolatedStorage.CreateFile(filePath);
-                using (StreamWriter isoStream = new StreamWriter(stream))
+                using (var isoStream = new StreamWriter(stream))
                 {
                     isoStream.WriteLine(text);
                 }

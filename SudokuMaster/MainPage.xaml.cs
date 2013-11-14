@@ -338,7 +338,7 @@ namespace Balda
             if (letterPicked)
             {
                 started = true;
-                Cell cell = sender as Cell;
+                var cell = sender as Cell;
                 if (previousCell != null)
                 {
                     if (Math.Abs((int)previousCell.GetValue(Grid.RowProperty) - (int)cell.GetValue(Grid.RowProperty)) +
@@ -347,7 +347,7 @@ namespace Balda
                         if (cell == newLetter)
                             containsNewLetter = true;
                         cell.BackgroundImage.Source = darkImage;
-                        word += (char)cell.Value;
+                        word += cell.Value;
                         listOfCoords.Add(cell);
                         previousCell = cell;
                     }
@@ -370,7 +370,7 @@ namespace Balda
                     if (cell == newLetter)
                         containsNewLetter = true;
                     cell.BackgroundImage.Source = darkImage;
-                    word += (char)cell.Value;
+                    word += cell.Value;
                     listOfCoords.Add(cell);
                     previousCell = cell;
                 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -66,6 +67,8 @@ namespace Balda
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            var initializeThread = new Thread(Processor.BaldaProcessor.Instance.InitializeDictionaries);
+            initializeThread.Start();
             Highscores.Load();
         }
 
