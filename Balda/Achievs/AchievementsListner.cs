@@ -1,10 +1,10 @@
-﻿using balda.Achievs;
+﻿using Balda.Achievs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace balda
+namespace Balda
 {
     //public delegate void GameEnded(object sender, EventArgs e);
 

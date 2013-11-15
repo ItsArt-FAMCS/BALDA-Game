@@ -9,7 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Balda;
 
-namespace balda
+namespace Balda
 {
     public partial class Settings : PhoneApplicationPage
     {

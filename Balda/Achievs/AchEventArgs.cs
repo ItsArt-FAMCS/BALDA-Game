@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace balda.Achievs
+namespace Balda.Achievs
 {
     class AchEventArgs : EventArgs
     {

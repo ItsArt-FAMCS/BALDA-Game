@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace balda
+namespace Balda
 {
     public partial class PageSwitch : UserControl
     {

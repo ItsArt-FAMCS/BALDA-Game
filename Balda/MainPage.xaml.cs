@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using balda.Achievements;
+using Balda.Achievements;
 
 namespace Balda
 {
@@ -50,9 +50,9 @@ namespace Balda
         private bool containsNewLetter = false;
         private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
         private List<Cell> listOfCoords;
-        private balda.Achievements.AchievmentGain achGain;
-        private balda.AchievementsProcessor achProc;
-        private balda.AchievementsListner achListner;
+        private Balda.Achievements.AchievmentGain achGain;
+        private Balda.AchievementsProcessor achProc;
+        private Balda.AchievementsListner achListner;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -63,8 +63,8 @@ namespace Balda
                 gameTimer = new DispatcherTimer();
                 gameTimer.Interval = TimeSpan.FromSeconds(1);
                 gameTimer.Tick += StatusTimerTick;
-                achProc = new balda.AchievementsProcessor();
-                achListner = new balda.AchievementsListner(achProc);
+                achProc = new Balda.AchievementsProcessor();
+                achListner = new Balda.AchievementsListner(achProc);
                 gamePausedTime = new DateTime();
                 
                 cells = CreateGrid();

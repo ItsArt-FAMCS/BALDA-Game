@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace balda.Achievements
+namespace Balda.Achievements
 {
     public partial class AchievmentGain : UserControl
     {
