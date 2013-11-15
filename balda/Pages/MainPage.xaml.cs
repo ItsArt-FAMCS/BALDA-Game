@@ -100,7 +100,7 @@ namespace Balda
         {
             gamePausedTime = DateTime.Now;
 
-            NavigationService.Navigate(new Uri("/HighscoresPage.xaml",
+            NavigationService.Navigate(new Uri("/Highscores/HighscoresPage.xaml",
                 UriKind.RelativeOrAbsolute));
         }
 
@@ -213,24 +213,15 @@ namespace Balda
             //gameTimer.Stop();
             bool won = pScore > cScore ? true : false;
             achProc.gameEnded(GameLogic.Instance.dificulty, won);
-            //// Blink all cells and prevent the player from modifying the cells
-            //for (int row = 0; row < GameLogic.Instance.size; row++)
-            //{
-            //    for (int col = 0; col < GameLogic.Instance.size; col++)
-            //    {
-            //        GameLogic.Instance.Model.BoardNumbers[row][col].SetByGame = true; // to block the user input
-            //        cells[row][col].Blink();
-            //    }
-            //}
 
             // Display the score with GameOver dialog
-            HighscoreItem score = new HighscoreItem();
+            var score = new HighscoreItem();
             score.Time = new TimeSpan(gameTimeElapsed.Days, gameTimeElapsed.Hours,
                 gameTimeElapsed.Minutes, gameTimeElapsed.Seconds, 0);
             score.player1 = pScore;
             score.player2 = cScore;
 			//TODO: move this to XAML
-            GameOver gameOver = new GameOver(score);
+            var gameOver = new GameOver(score);
             // Main page is divided into 2x3 grid. Make sure the row and column
             // properties are set properly (position 0,0 with span 2,3) to make
             // the dialog visible anywhere on the page.
@@ -259,7 +250,7 @@ namespace Balda
             
 			bool lightCell = false;
             int size = GameLogic.Instance.size;
-			Cell[][] cells = new Cell[size][];
+			var cells = new Cell[size][];
             listOfCoords = new List<Cell>();
             for (int row = 0; row < size; row++)
 			{
@@ -283,10 +274,10 @@ namespace Balda
                     c.MouseEnter += new MouseEventHandler(OnCellEnter);
                     c.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(OnCellLost);
                     // set binding to proper BoardValue from BoardViewModel
-					Binding b = new Binding(string.Format("BoardNumbers[{0}][{1}].Value", row, col));
+					var b = new Binding(string.Format("BoardNumbers[{0}][{1}].Value", row, col));
 					c.SetBinding(Cell.ValueProperty, b);
 
-					Binding b2 = new Binding(string.Format("BoardNumbers[{0}][{1}].SetByGame", row, col)); 
+					var b2 = new Binding(string.Format("BoardNumbers[{0}][{1}].SetByGame", row, col)); 
 					c.SetBinding(Cell.SetByGameProperty, b2);
 
 					cells[row][col] = c;
@@ -477,7 +468,7 @@ namespace Balda
 		/// </summary>
 		private Thickness GetPositionForCell(Cell cell)
 		{
-			var pos = new System.Windows.Point(cell.ActualWidth / 2 - numberSelection.KeyboardSize.Width / 2, cell.ActualHeight / 2 - numberSelection.KeyboardSize.Height / 2);
+			var pos = new Point(cell.ActualWidth / 2 - numberSelection.KeyboardSize.Width / 2, cell.ActualHeight / 2 - numberSelection.KeyboardSize.Height / 2);
 			pos = cell.TransformToVisual(LayoutRoot).Transform(pos);
 
 			if (pos.X < 0)
@@ -500,25 +491,11 @@ namespace Balda
 		{
             int x = (int)sender.GetValue(Grid.RowProperty);
             int y = (int)sender.GetValue(Grid.ColumnProperty);
-            var conflictingCells = GameLogic.Instance.SetNumberByPlayer((int)sender.GetValue(Grid.RowProperty),
-														  (int)sender.GetValue(Grid.ColumnProperty), 
-														  number);
-
-		//	foreach (var point in conflictingCells)
-			//	cells[point.X][point.Y].Blink();
+            GameLogic.Instance.SetNumberByPlayer((int)sender.GetValue(Grid.RowProperty), (int)sender.GetValue(Grid.ColumnProperty), number);
             cells[x][y].Blink();
-            SoundHelper.PlaySound(SoundHelper.SoundType.CellSelectedSound);
-            
-           // if (gameState != GameState.NotStarted && game.EmptyCells == 0)
-             //   GameEnds();
+		    SoundHelper.PlaySound(SoundHelper.SoundType.CellSelectedSound);
 		}
 
-        /// <summary>
-        /// Event handler for application deactivation.
-        /// Stores the current game state into a file.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="r">Event arguments.</param>
         void App_Deactivated(object sender, DeactivatedEventArgs e)
         {
             
@@ -537,7 +514,7 @@ namespace Balda
 			int emptyCells = 0;
 			using (IsolatedStorageFileStream stream = store.OpenFile(gameStateFile, FileMode.Open))
 			{
-				using (BinaryReader reader = new BinaryReader(stream))
+				using (var reader = new BinaryReader(stream))
 				{
 					// Read the state and stats
 					gameState = (GameState)reader.ReadInt32();
@@ -567,133 +544,133 @@ namespace Balda
         }
 
 
-        /// <summary>
-        /// Event handler for orientation changes.
-        /// Repositions UI elements depending on the orientation.
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        /// <param name="r">Event arguments</param>
-        private void PhoneApplicationPage_OrientationChanged(object sender,OrientationChangedEventArgs e)
-        {
-            if (e.Orientation == PageOrientation.Landscape ||
-                e.Orientation == PageOrientation.LandscapeLeft ||
-                e.Orientation == PageOrientation.LandscapeRight)
-            {
-               // Logo.SetValue(Grid.RowProperty, 1);
-                //Logo.SetValue(Grid.ColumnSpanProperty, 1);
+        ///// <summary>
+        ///// Event handler for orientation changes.
+        ///// Repositions UI elements depending on the orientation.
+        ///// </summary>
+        ///// <param name="sender">Sender of the event</param>
+        ///// <param name="r">Event arguments</param>
+        //private void PhoneApplicationPage_OrientationChanged(object sender,OrientationChangedEventArgs e)
+        //{
+        //    if (e.Orientation == PageOrientation.Landscape ||
+        //        e.Orientation == PageOrientation.LandscapeLeft ||
+        //        e.Orientation == PageOrientation.LandscapeRight)
+        //    {
+        //       // Logo.SetValue(Grid.RowProperty, 1);
+        //        //Logo.SetValue(Grid.ColumnSpanProperty, 1);
 
-                BoardGrid.SetValue(Grid.RowProperty, 0);
-                BoardGrid.SetValue(Grid.ColumnProperty, 1);
-                BoardGrid.SetValue(Grid.RowSpanProperty, 3);
-                BoardGrid.SetValue(Grid.ColumnSpanProperty, 2);
+        //        BoardGrid.SetValue(Grid.RowProperty, 0);
+        //        BoardGrid.SetValue(Grid.ColumnProperty, 1);
+        //        BoardGrid.SetValue(Grid.RowSpanProperty, 3);
+        //        BoardGrid.SetValue(Grid.ColumnSpanProperty, 2);
 
-                waitIndicator.SetValue(Grid.RowProperty, 0);
-                waitIndicator.SetValue(Grid.ColumnProperty, 1);
-                waitIndicator.SetValue(Grid.RowSpanProperty, 3);
-                waitIndicator.SetValue(Grid.ColumnSpanProperty, 2);
+        //        waitIndicator.SetValue(Grid.RowProperty, 0);
+        //        waitIndicator.SetValue(Grid.ColumnProperty, 1);
+        //        waitIndicator.SetValue(Grid.RowSpanProperty, 3);
+        //        waitIndicator.SetValue(Grid.ColumnSpanProperty, 2);
 
-                Statistics.SetValue(Grid.RowProperty, 1);
-                Statistics.SetValue(Grid.RowSpanProperty, 2);
-                Statistics.SetValue(Grid.ColumnSpanProperty, 1);
+        //        Statistics.SetValue(Grid.RowProperty, 1);
+        //        Statistics.SetValue(Grid.RowSpanProperty, 2);
+        //        Statistics.SetValue(Grid.ColumnSpanProperty, 1);
 
-                if(e.Orientation == PageOrientation.LandscapeLeft)
-                    LayoutRoot.Margin = new Thickness(0 ,0 ,72 ,0);
-                if (e.Orientation == PageOrientation.LandscapeRight)
-                    LayoutRoot.Margin = new Thickness(72, 0, 0, 0);
+        //        if(e.Orientation == PageOrientation.LandscapeLeft)
+        //            LayoutRoot.Margin = new Thickness(0 ,0 ,72 ,0);
+        //        if (e.Orientation == PageOrientation.LandscapeRight)
+        //            LayoutRoot.Margin = new Thickness(72, 0, 0, 0);
 
-                LayoutRoot.RowDefinitions[0].Height = new GridLength(90);
-                LayoutRoot.RowDefinitions[1].Height = new GridLength(90);
+        //        LayoutRoot.RowDefinitions[0].Height = new GridLength(90);
+        //        LayoutRoot.RowDefinitions[1].Height = new GridLength(90);
 
-                for (int t = 0; t < Statistics.ColumnDefinitions.Count; t++)
-                    Statistics.ColumnDefinitions[t].Width = new GridLength(0);
+        //        for (int t = 0; t < Statistics.ColumnDefinitions.Count; t++)
+        //            Statistics.ColumnDefinitions[t].Width = new GridLength(0);
 
-                Statistics.ColumnDefinitions[0].Width = new GridLength(10);
-                Statistics.ColumnDefinitions[1].Width = new GridLength(35, GridUnitType.Star);
-                Statistics.ColumnDefinitions[2].Width = new GridLength(65, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[0].Width = new GridLength(10);
+        //        Statistics.ColumnDefinitions[1].Width = new GridLength(35, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[2].Width = new GridLength(65, GridUnitType.Star);
 
-                Statistics.RowDefinitions[0].Height = new GridLength(10);
-                Statistics.RowDefinitions[1].Height = new GridLength(100, GridUnitType.Star);
-                Statistics.RowDefinitions[2].Height = new GridLength(100, GridUnitType.Star);
-                Statistics.RowDefinitions[3].Height = new GridLength(100, GridUnitType.Star);
-                Statistics.RowDefinitions[4].Height = new GridLength(10);
+        //        Statistics.RowDefinitions[0].Height = new GridLength(10);
+        //        Statistics.RowDefinitions[1].Height = new GridLength(100, GridUnitType.Star);
+        //        Statistics.RowDefinitions[2].Height = new GridLength(100, GridUnitType.Star);
+        //        Statistics.RowDefinitions[3].Height = new GridLength(100, GridUnitType.Star);
+        //        Statistics.RowDefinitions[4].Height = new GridLength(10);
 
-                Statistics.Height = 192;
+        //        Statistics.Height = 192;
 
-                MovesImage.SetValue(Grid.ColumnProperty, 1);
-                MovesImage.SetValue(Grid.RowProperty, 1);
+        //        MovesImage.SetValue(Grid.ColumnProperty, 1);
+        //        MovesImage.SetValue(Grid.RowProperty, 1);
 
-                EmptyImage.SetValue(Grid.ColumnProperty, 1);
-                EmptyImage.SetValue(Grid.RowProperty, 2);
+        //        EmptyImage.SetValue(Grid.ColumnProperty, 1);
+        //        EmptyImage.SetValue(Grid.RowProperty, 2);
 
-                GameTimeImage.SetValue(Grid.ColumnProperty, 1);
-                GameTimeImage.SetValue(Grid.RowProperty, 3);
+        //        GameTimeImage.SetValue(Grid.ColumnProperty, 1);
+        //        GameTimeImage.SetValue(Grid.RowProperty, 3);
 
-                Moves.SetValue(Grid.ColumnProperty, 2);
-                Moves.SetValue(Grid.RowProperty, 1);
+        //        Moves.SetValue(Grid.ColumnProperty, 2);
+        //        Moves.SetValue(Grid.RowProperty, 1);
 
-                Empty.SetValue(Grid.ColumnProperty, 2);
-                Empty.SetValue(Grid.RowProperty, 2);
+        //        Empty.SetValue(Grid.ColumnProperty, 2);
+        //        Empty.SetValue(Grid.RowProperty, 2);
 
-                GameTime.SetValue(Grid.ColumnProperty, 2);
-                GameTime.SetValue(Grid.RowProperty, 3);
-            }
-            else
-            {
-               // Logo.SetValue(Grid.RowProperty, 0);
-                //Logo.SetValue(Grid.ColumnSpanProperty, 2);
+        //        GameTime.SetValue(Grid.ColumnProperty, 2);
+        //        GameTime.SetValue(Grid.RowProperty, 3);
+        //    }
+        //    else
+        //    {
+        //       // Logo.SetValue(Grid.RowProperty, 0);
+        //        //Logo.SetValue(Grid.ColumnSpanProperty, 2);
 
-                BoardGrid.SetValue(Grid.RowProperty, 1);
-                BoardGrid.SetValue(Grid.ColumnProperty, 0);
-                BoardGrid.SetValue(Grid.RowSpanProperty, 1);
-                BoardGrid.SetValue(Grid.ColumnSpanProperty, 2);
+        //        BoardGrid.SetValue(Grid.RowProperty, 1);
+        //        BoardGrid.SetValue(Grid.ColumnProperty, 0);
+        //        BoardGrid.SetValue(Grid.RowSpanProperty, 1);
+        //        BoardGrid.SetValue(Grid.ColumnSpanProperty, 2);
 
-                waitIndicator.SetValue(Grid.RowProperty, 1);
-                waitIndicator.SetValue(Grid.ColumnProperty, 0);
-                waitIndicator.SetValue(Grid.RowSpanProperty, 1);
-                waitIndicator.SetValue(Grid.ColumnSpanProperty, 2);
+        //        waitIndicator.SetValue(Grid.RowProperty, 1);
+        //        waitIndicator.SetValue(Grid.ColumnProperty, 0);
+        //        waitIndicator.SetValue(Grid.RowSpanProperty, 1);
+        //        waitIndicator.SetValue(Grid.ColumnSpanProperty, 2);
 
-                Statistics.SetValue(Grid.RowProperty, 3);
-                Statistics.SetValue(Grid.RowSpanProperty, 1);
-                Statistics.SetValue(Grid.ColumnSpanProperty, 2);
+        //        Statistics.SetValue(Grid.RowProperty, 3);
+        //        Statistics.SetValue(Grid.RowSpanProperty, 1);
+        //        Statistics.SetValue(Grid.ColumnSpanProperty, 2);
 
-                LayoutRoot.Margin = new Thickness(0, 0, 0, 72);
-                LayoutRoot.RowDefinitions[0].Height = new GridLength(120);
-                LayoutRoot.RowDefinitions[1].Height = new GridLength(460);
+        //        LayoutRoot.Margin = new Thickness(0, 0, 0, 72);
+        //        LayoutRoot.RowDefinitions[0].Height = new GridLength(120);
+        //        LayoutRoot.RowDefinitions[1].Height = new GridLength(460);
 
-                for (int t = 0; t < Statistics.RowDefinitions.Count; t++)
-                    Statistics.RowDefinitions[t].Height = new GridLength(0);
+        //        for (int t = 0; t < Statistics.RowDefinitions.Count; t++)
+        //            Statistics.RowDefinitions[t].Height = new GridLength(0);
 
-                Statistics.ColumnDefinitions[0].Width = new GridLength(18);
-                Statistics.ColumnDefinitions[1].Width = new GridLength(60, GridUnitType.Star);
-                Statistics.ColumnDefinitions[2].Width = new GridLength(75, GridUnitType.Star);
-                Statistics.ColumnDefinitions[3].Width = new GridLength(60, GridUnitType.Star);
-                Statistics.ColumnDefinitions[4].Width = new GridLength(75, GridUnitType.Star);
-                Statistics.ColumnDefinitions[5].Width = new GridLength(60, GridUnitType.Star);
-                Statistics.ColumnDefinitions[6].Width = new GridLength(90, GridUnitType.Star);
-                Statistics.ColumnDefinitions[7].Width = new GridLength(18);
+        //        Statistics.ColumnDefinitions[0].Width = new GridLength(18);
+        //        Statistics.ColumnDefinitions[1].Width = new GridLength(60, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[2].Width = new GridLength(75, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[3].Width = new GridLength(60, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[4].Width = new GridLength(75, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[5].Width = new GridLength(60, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[6].Width = new GridLength(90, GridUnitType.Star);
+        //        Statistics.ColumnDefinitions[7].Width = new GridLength(18);
 
-                Statistics.RowDefinitions[0].Height = new GridLength(100, GridUnitType.Star);
+        //        Statistics.RowDefinitions[0].Height = new GridLength(100, GridUnitType.Star);
 
-                Statistics.Height = 64;
+        //        Statistics.Height = 64;
                 
-                MovesImage.SetValue(Grid.ColumnProperty, 1);
-                MovesImage.SetValue(Grid.RowProperty, 0);
+        //        MovesImage.SetValue(Grid.ColumnProperty, 1);
+        //        MovesImage.SetValue(Grid.RowProperty, 0);
 
-                EmptyImage.SetValue(Grid.ColumnProperty, 3);
-                EmptyImage.SetValue(Grid.RowProperty, 0);
+        //        EmptyImage.SetValue(Grid.ColumnProperty, 3);
+        //        EmptyImage.SetValue(Grid.RowProperty, 0);
 
-                GameTimeImage.SetValue(Grid.ColumnProperty, 5);
-                GameTimeImage.SetValue(Grid.RowProperty, 0);
+        //        GameTimeImage.SetValue(Grid.ColumnProperty, 5);
+        //        GameTimeImage.SetValue(Grid.RowProperty, 0);
 
-                Moves.SetValue(Grid.ColumnProperty, 2);
-                Moves.SetValue(Grid.RowProperty, 0);
+        //        Moves.SetValue(Grid.ColumnProperty, 2);
+        //        Moves.SetValue(Grid.RowProperty, 0);
 
-                Empty.SetValue(Grid.ColumnProperty, 4);
-                Empty.SetValue(Grid.RowProperty, 0);
+        //        Empty.SetValue(Grid.ColumnProperty, 4);
+        //        Empty.SetValue(Grid.RowProperty, 0);
 
-                GameTime.SetValue(Grid.ColumnProperty, 6);
-                GameTime.SetValue(Grid.RowProperty, 0);
-            }
-        }
+        //        GameTime.SetValue(Grid.ColumnProperty, 6);
+        //        GameTime.SetValue(Grid.RowProperty, 0);
+        //    }
+        //}
     }
 }

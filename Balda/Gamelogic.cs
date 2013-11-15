@@ -40,7 +40,7 @@ namespace Balda
         protected GameLogic()
         {
 			Model = new BoardModel(size, size);
-            achs = ReadFile("achfile.txt");
+            achs = ReadFile("Achievs/achfile.txt");
         }
 
         public void WriteToFile(string filePath, string text)
@@ -98,10 +98,9 @@ namespace Balda
         /// <param name="x">X coordinate to set</param>
         /// <param name="y">Y coordinate to set</param>
         /// <param name="value">Number to set</param>
-        public List<Point> SetNumberByPlayer(int x, int y, char value)
+        public void SetNumberByPlayer(int x, int y, char value)
         {
             Model.BoardNumbers[x][y].Value = value;
-            return null;
         }
 
         public void AIMove()

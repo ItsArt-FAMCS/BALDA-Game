@@ -18,14 +18,13 @@
     SupportedOrientations="PortraitOrLandscape" 
     Orientation="Portrait"
     shell:SystemTray.IsVisible="False" 
-    UseLayoutRounding="True"
-    OrientationChanged="PhoneApplicationPage_OrientationChanged">
+    UseLayoutRounding="True">
 
     <!--The root grid contains background image and the nested grid containing all page content.
     It's used to cause that background image fills whole page despite setting margin on the layout root  -->
     <Grid>
         <!-- Background image -->
-        <Image Source="Background.png" Stretch="Fill" Height="728" VerticalAlignment="Top" />
+        <Image Source="/gfx/Background.png" Stretch="Fill" Height="728" VerticalAlignment="Top" />
         <!--LayoutRoot is the root grid where all page content is placed-->
         <Grid x:Name="LayoutRoot">
         <!-- Use 3 rows and 2 columns. This makes it is easy to reposition 

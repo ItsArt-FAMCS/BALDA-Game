@@ -90,40 +90,39 @@
     </Compile>
     <Compile Include="BoardModel.cs" />
     <Compile Include="BoardValue.cs" />
-    <Compile Include="Cell.xaml.cs">
+    <Compile Include="Pages\Cell.xaml.cs">
       <DependentUpon>Cell.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameLogic.cs" />
-    <Compile Include="GameOver.xaml.cs">
+    <Compile Include="Pages\GameOver.xaml.cs">
       <DependentUpon>GameOver.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HighscoreItem.cs" />
-    <Compile Include="HighscoresPage.xaml.cs">
+    <Compile Include="Highscores\HighscoreItem.cs" />
+    <Compile Include="Highscores\HighscoresPage.xaml.cs">
       <DependentUpon>HighscoresPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MemoryDiagnosticsControl.cs" />
-    <Compile Include="Menu.xaml.cs">
+    <Compile Include="Pages\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NumberSelection.xaml.cs">
+    <Compile Include="Pages\NumberSelection.xaml.cs">
       <DependentUpon>NumberSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PageSwitch.xaml.cs">
+    <Compile Include="Pages\PageSwitch.xaml.cs">
       <DependentUpon>PageSwitch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Point.cs" />
     <Compile Include="Processor\BaldaProcessor.cs" />
     <Compile Include="Processor\Field.cs" />
     <Compile Include="Processor\Way.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.xaml.cs">
+    <Compile Include="Pages\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="SoundHelper.cs" />
-    <Compile Include="WaitNote.xaml.cs">
+    <Compile Include="Pages\WaitNote.xaml.cs">
       <DependentUpon>WaitNote.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -138,49 +137,49 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Cell.xaml">
+    <Page Include="Pages\Cell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GameOver.xaml">
+    <Page Include="Pages\GameOver.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="HighscoresPage.xaml">
+    <Page Include="Highscores\HighscoresPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Menu.xaml">
+    <Page Include="Pages\Menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NumberSelection.xaml">
+    <Page Include="Pages\NumberSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PageSwitch.xaml">
+    <Page Include="Pages\PageSwitch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings.xaml">
+    <Page Include="Pages\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WaitNote.xaml">
+    <Page Include="Pages\WaitNote.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -194,15 +193,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="achfile.txt" />
+    <Content Include="Achievs\achfile.txt" />
     <Content Include="Achievs\Achievements.txt" />
-    <Content Include="ApplicationIcon.png">
+    <Content Include="gfx\ApplicationIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Background.png">
+    <Resource Include="gfx\Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Content Include="dict\1.txt" />
+    <Content Include="dict\BigDictionary.txt" />
     <Content Include="gfx\back.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

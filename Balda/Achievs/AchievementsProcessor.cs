@@ -75,7 +75,7 @@ namespace Balda
             }
             if (newAch)
             {
-                Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
+                Balda.GameLogic.Instance.WriteToFile("Achievs/achfile.txt", st.ToString());
                 OnChanged(args);
                 newAch = false;
             }
@@ -109,7 +109,7 @@ namespace Balda
             }
             if (newAch)
             {
-                Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
+                Balda.GameLogic.Instance.WriteToFile("Achievs/achfile.txt", st.ToString());
                 OnChanged(args);
                 newAch = false;
             }

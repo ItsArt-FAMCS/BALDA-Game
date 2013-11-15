@@ -215,7 +215,7 @@ namespace Balda.Processor
             {
                 lock (locker)
                 {
-                    var words = ReadFile("dict/1.txt");
+                    var words = ReadFile("dict/BigDictionary.txt");
                     InitializeDictionaries(words);
                 }
             }

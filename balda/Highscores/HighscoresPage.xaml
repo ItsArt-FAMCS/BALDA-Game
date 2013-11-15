@@ -21,10 +21,10 @@
     <Grid Name="LayoutRoot">
 
         <!-- Background for the grid. Same image is used as in main page. -->
-        <Image Source="Background.png" Stretch="Fill" />
+        <Image Source="/gfx/Background.png" Stretch="Fill" />
 
         <!-- Balda logo/title on the top of the page. -->
-        <Image HorizontalAlignment="Center" Source="gfx/logo.png" VerticalAlignment="Top" />
+        <Image HorizontalAlignment="Center" Source="/gfx/logo.png" VerticalAlignment="Top" />
 
         <!-- The highscores text below the logo. -->
         <TextBlock Text="Highscores"
