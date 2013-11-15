@@ -44,7 +44,14 @@
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}"
-          Opacity="0.9" Margin="0,70,10,106">
+          Opacity="0.9" Margin="0,70,0,116" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto">
+        <Grid.Clip>
+            <RectangleGeometry RadiusX="20" RadiusY="20" Rect="0,0,460,340" >
+                <RectangleGeometry.Transform>
+                    <CompositeTransform CenterX="50"/>
+                </RectangleGeometry.Transform>
+            </RectangleGeometry>
+        </Grid.Clip>
         <Grid.Resources>
             <!-- Animation used to fade in the entire control when it is created -->
             <Storyboard x:Name="fadeInAnimation">
@@ -63,7 +70,10 @@
                     Completed="FadeOutAnimation_Completed" />
             </Storyboard>
         </Grid.Resources>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="25,26,0,0" TextWrapping="Wrap" Text="Достижение получено: " VerticalAlignment="Top" Width="415" Height="138" Foreground="#FF8440A4" FontSize="24"/>
+        <Grid.RenderTransform>
+            <CompositeTransform Rotation="0.187"/>
+        </Grid.RenderTransform>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,16,0,0" TextWrapping="Wrap" Text="Достижение получено: " VerticalAlignment="Top" Width="415" Height="138" Foreground="#FF8440A4" FontSize="24"/>
         <!-- Animations -->
     </Grid>
    

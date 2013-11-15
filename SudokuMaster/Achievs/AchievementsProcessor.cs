@@ -20,7 +20,7 @@ namespace balda
         public event EasyWon eWon;
         public delegate void FiveLetters(object sender, AchEventArgs e);
         public event FiveLetters fLetters;
-
+        private bool newAch = false;
         protected virtual void OnChanged(AchEventArgs e)
         {
             if (fLetters != null)
@@ -55,6 +55,7 @@ namespace balda
                 args.ach.Add("\"Гроза школьников!\"");
                 ewon = true;
                 st[3] = '1';
+                newAch = true;
             }
 
             if (diff == Balda.Processor.DifficultyLevel.Addaptive && hasWon && !nwon)
@@ -62,6 +63,7 @@ namespace balda
                 args.ach.Add("\"Победи себя\"");
                 nwon = true;
                 st[4] = '1';
+                newAch = true;
             }
 
             if (diff == Balda.Processor.DifficultyLevel.Insane && hasWon && !iwon)
@@ -69,9 +71,14 @@ namespace balda
                 args.ach.Add("\"Верховный эрудит\"");
                 iwon = true;
                 st[4] = '1';
+                newAch = true;
             }
-            Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
-            OnChanged(args);
+            if (newAch)
+            {
+                Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
+                OnChanged(args);
+                newAch = false;
+            }
         }
 
         public void wordPicked(string word)
@@ -82,6 +89,7 @@ namespace balda
                 args.ach.Add("\"Я умею писать\"");
                 fletters = true;
                 st[0] = '1';
+                newAch = true;
             }
 
             if(word.Length >= 10 && !tletters)
@@ -89,6 +97,7 @@ namespace balda
                 args.ach.Add("\"Мастер слова\"");
                 tletters = true;
                 st[1] = '1';
+                newAch = true;
             }
 
             if (word.Length >= 15 && !ftletters)
@@ -96,9 +105,15 @@ namespace balda
                 args.ach.Add("\"Высокопревосходительство (политетрафторэтиленацетоксипропилбутан)\"");
                 ftletters = true;
                 st[2] = '1';
+                newAch = true;
             }
-            Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
-            OnChanged(args);
+            if (newAch)
+            {
+                Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
+                OnChanged(args);
+                newAch = false;
+            }
+            
         }
     }
 }
