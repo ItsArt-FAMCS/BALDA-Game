@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Achievs\Achievements.txt" />
+    <Content Include="dict\SmallDictionary.txt" />
     <Content Include="gfx\ApplicationIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
