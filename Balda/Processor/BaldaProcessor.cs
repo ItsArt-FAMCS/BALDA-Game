@@ -203,12 +203,13 @@ namespace Balda.Processor
 
         public bool IsLegalWord(string word)
         {
-            word = word.ToLower().Trim();
+            word = word.ToLower().Trim().Replace('ё','е');
             return WordsBig.Contains(word) && !Used.Contains(word);
         }
 
         public bool AddWord(string word, Field field)
         {
+            word = word.ToLower().Trim().Replace('ё', 'е');
             if (IsLegalWord(word))
             {
                 field.Step = null;
