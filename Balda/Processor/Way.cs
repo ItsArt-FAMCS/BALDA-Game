@@ -67,9 +67,7 @@ namespace Balda.Processor
                 return string.Empty;
             }
         }
-
-        public bool StopSearch { get; set; }
-
+        
         public Field First { get; set; }
         public Field Last { get; set; }
 

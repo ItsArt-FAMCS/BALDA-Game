@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Resources;
 
 namespace Balda.Processor
 {
@@ -33,7 +34,8 @@ namespace Balda.Processor
         protected BaldaProcessor() { }
 
         //Fields
-        public List<string> Words { get; set; }
+        public List<string> WordsBig { get; set; }
+        public List<string> WordsSmall { get; set; }
         private Dictionary<string, List<string>> LongWordsContainer { get; set; }
         private List<string> ShortWordsContainer { get; set; }
         private DifficultyLevel Difficulty { get; set; }
@@ -75,7 +77,7 @@ namespace Balda.Processor
 
             Desk = new Field[Size, Size];
 
-            var startWords = Words.Where(e => e.Length == Size).ToArray();
+            var startWords = WordsSmall.Where(e => e.Length == Size).ToArray();
             var wordNumber = random.Next(0, startWords.Count() - 1);
             var startword = startWords[wordNumber];
             Used = new List<string> { startword };
@@ -120,20 +122,15 @@ namespace Balda.Processor
             return result;
         }
 
-        public WayView AIProcess()
+        private List<Way> GetAllAIWays()
         {
-            lock (locker)
-            {
-            }
-            Way result = null;
+            var result = new List<Way>();
 
-            var needShort = NeedShort();
-            var stopSearch = false;
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    if (Desk[i, j].Value == ' ' && !stopSearch)
+                    if (Desk[i, j].Value == ' ')
                     {
                         foreach (var letter in Alphabet)
                         {
@@ -141,21 +138,49 @@ namespace Balda.Processor
                             {
                                 Value = letter
                             };
-                            var way = GetBestWay(startField, needShort);
-                            if (way != null && way.StopSearch)
-                            {
-                                result = way;
-                                stopSearch = true;
-                                break;
-                            }
-                            if (way != null && (result == null || result.Text.Length < way.Text.Length))
-                            {
-                                result = way;
-                            }
+                            result.AddRange(GetWays(startField));
                         }
                     }
                 }
             }
+            return result;
+        }
+
+        private Way GetSpecialWay(List<Way> words)
+        {
+            if (words.Count == 0)
+            {
+                return null;
+            }
+            if (NeedShort())
+            {
+                for (int i = KeyLength; i >= 2; i--)
+                {
+                    var shortWord = words.FirstOrDefault(e => e.Text.Length == 4);
+                    if (shortWord != null)
+                        return shortWord;
+                }
+            }
+            var maxLength = 0;
+            Way result = null;
+            foreach (var word in words)
+            {
+                if (word.Text.Length > maxLength || result == null)
+                {
+                    maxLength = word.Text.Length;
+                    result = word;
+                }
+            }
+            return result;
+        }
+
+        public WayView AIProcess()
+        {
+            lock (locker)
+            {
+            }
+            var allWords = GetAllAIWays();
+            var result = GetSpecialWay(allWords);
             if (result == null)
             {
                 return null;
@@ -178,7 +203,7 @@ namespace Balda.Processor
         public bool IsLegalWord(string word)
         {
             word = word.ToLower().Trim();
-            return Words.Contains(word) && !Used.Contains(word);
+            return WordsBig.Contains(word) && !Used.Contains(word);
         }
 
         public bool AddWord(string word, Field field)
@@ -211,23 +236,25 @@ namespace Balda.Processor
 
         public void InitializeDictionaries()
         {
-            if (Words == null)
+            if (WordsBig == null)
             {
                 lock (locker)
                 {
-                    var words = ReadFile("dict/BigDictionary.txt");
-                    InitializeDictionaries(words);
+                    var wordsBig = ReadFile("dict/BigDictionary.txt");
+                    var wordsSmall = ReadFile("dict/SmallDictionary.txt");
+                    InitializeDictionaries(wordsBig, wordsSmall);
                 }
             }
         }
 
-        private void InitializeDictionaries(String words)
+        private void InitializeDictionaries(String wordsBig, String wordsSmall)
         {
-            Words = words.Split(new[] { ' ', '\r', '\n', '\t' }).Where(e => e != string.Empty).Select(e => e.ToLower().Trim()).ToList();
+            WordsBig = wordsBig.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Select(e => e.ToLower().Trim()).ToList();
+            WordsSmall = wordsSmall.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Select(e => e.ToLower().Trim()).ToList();
             LongWordsContainer = new Dictionary<string, List<string>>();
             ShortWordsContainer = new List<string>();
 
-            foreach (var word in Words)
+            foreach (var word in WordsSmall)
             {
                 if (word.Length >= KeyLength)
                 {
@@ -312,21 +339,19 @@ namespace Balda.Processor
             return result;
         }
 
-        protected Way GetBestWay(Field start, bool needShort = false)
+        protected List<Way> GetWays(Field start)
         {
             //Get Start Keys
+            var result = new List<Way>();
             var ways = GetStartWays(start);
             if (ways.Count == 0)
-                return null;
-            Way result = null;
+                return result;
 
             for (int i = 0; i < KeyLength - 2; i++)
             {
-                foreach (var way in ways.Where(way => (ShortWordsContainer.Contains(way.Text) && (Used.Contains(way.Text) == false))
-                   || (ShortWordsContainer.Contains(way.Reverse) && (Used.Contains(way.Reverse) == false))))
-                {
-                    result = way;
-                }
+                result.AddRange(ways.Where(way =>
+                    (ShortWordsContainer.Contains(way.Text) && (Used.Contains(way.Text) == false))
+                    || (ShortWordsContainer.Contains(way.Reverse) && (Used.Contains(way.Reverse) == false))));
                 ways = ExtendLastWays(ways);
             }
             //Initialize start dictionaries
@@ -335,13 +360,8 @@ namespace Balda.Processor
                 way.Words = LongWordsContainer.ContainsKey(way.Text) ? LongWordsContainer[way.Text] : new List<string>();
                 if ((way.IsWord && Used.Contains(way.Word) == false) || (way.TwoWords && Used.Contains(way.Reverse) == false))
                 {
-                    result = way;
+                    result.Add(way);
                 }
-            }
-            if (needShort && result != null)
-            {
-                result.StopSearch = true;
-                return result;
             }
             //Поиск в ширину, короче
             while (ways.Count > 0)
@@ -355,10 +375,9 @@ namespace Balda.Processor
                     {
                         ways.Add(way);
                     }
-                    if ((result == null || way.Text.Length > result.Text.Length)
-                        && ((way.IsWord && Used.Contains(way.Word) == false) || (way.TwoWords && Used.Contains(way.Reverse) == false)))
+                    if ((way.IsWord && Used.Contains(way.Word) == false) || (way.TwoWords && Used.Contains(way.Reverse) == false))
                     {
-                        result = way;
+                        result.Add(way);
                     }
                 }
             }
