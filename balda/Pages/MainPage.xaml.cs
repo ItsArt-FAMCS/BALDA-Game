@@ -291,6 +291,7 @@ namespace Balda
         private bool letterPicked = false;
         private string word = "";
         private Cell newLetter;
+        private List<Processor.Field> AIfields;
 
 		private void OnCellTouched(object sender, MouseButtonEventArgs e)
 		{
@@ -305,8 +306,14 @@ namespace Balda
             {
                 if (cell.Value == ' ' || cell == newLetter)
                 {
-                    if(newCompLetter != null)
-                    newCompLetter.BackgroundImage.Source = lightImage;
+                    if (newCompLetter != null)
+                    {
+                        newCompLetter.BackgroundImage.Source = lightImage;
+                        foreach (var x in AIfields)
+                        {
+                            cells[x.X][x.Y].BackgroundImage.Source = lightImage;
+                        }
+                    }
                     // This lambda experssion will allow us to have access to destination cell in a clean way
                     numberSelection.OnSelectedNumber = (selectedNumber => OnNumberChoosen(cell, selectedNumber));
 
@@ -459,6 +466,11 @@ namespace Balda
             compScore.Text = cScore.ToString();
             cells[field.X][field.Y].Value = field.Value;
             newCompLetter = cells[field.X][field.Y];
+            AIfields = way.GetFields();
+            foreach (var x in AIfields)
+            {
+                cells[x.X][x.Y].BackgroundImage.Source = darkImage;
+            }
             newCompLetter.BackgroundImage.Source = darkImage;
             containsNewLetter = false;
         }
