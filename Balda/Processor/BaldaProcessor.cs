@@ -36,6 +36,7 @@ namespace Balda.Processor
         //Fields
         public List<string> WordsBig { get; set; }
         public List<string> WordsSmall { get; set; }
+        public List<string> StartWords { get; set; }
         private Dictionary<string, List<string>> LongWordsContainer { get; set; }
         private List<string> ShortWordsContainer { get; set; }
         private DifficultyLevel Difficulty { get; set; }
@@ -77,7 +78,7 @@ namespace Balda.Processor
 
             Desk = new Field[Size, Size];
 
-            var startWords = WordsSmall.Where(e => e.Length == Size).ToArray();
+            var startWords = StartWords.Where(e => e.Length == Size).ToArray();
             var wordNumber = random.Next(0, startWords.Count() - 1);
             var startword = startWords[wordNumber];
             Used = new List<string> { startword };
@@ -242,15 +243,17 @@ namespace Balda.Processor
                 {
                     var wordsBig = ReadFile("dict/BigDictionary.txt");
                     var wordsSmall = ReadFile("dict/SmallDictionary.txt");
-                    InitializeDictionaries(wordsBig, wordsSmall);
+                    var startWords = ReadFile("dict/MostUsed.txt");
+                    InitializeDictionaries(wordsBig, wordsSmall, startWords);
                 }
             }
         }
 
-        private void InitializeDictionaries(String wordsBig, String wordsSmall)
+        private void InitializeDictionaries(String wordsBig, String wordsSmall, String startWords)
         {
             WordsBig = wordsBig.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Select(e => e.ToLower().Trim()).ToList();
             WordsSmall = wordsSmall.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Select(e => e.ToLower().Trim()).ToList();
+            StartWords = startWords.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Select(e => e.ToLower().Trim()).ToList();
             LongWordsContainer = new Dictionary<string, List<string>>();
             ShortWordsContainer = new List<string>();
 

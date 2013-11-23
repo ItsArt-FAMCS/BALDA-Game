@@ -233,5 +233,24 @@ namespace Balda.Processor
             ShortWords = shortWords;
             Used = used;
         }
+
+        public List<Field> GetFields()
+        {
+            var result = new List<Field>();
+            for (int i = 0; i < BaldaProcessor.Size; i++)
+            {
+                for (int j = 0; j < BaldaProcessor.Size; j++)
+                {
+                    if (way != null && way.Desk != null && way.Desk[i, j].Step != null)
+                    {
+                        result.Add(new Field(i, j)
+                            {
+                                Value = way.Desk[i, j].Value
+                            });
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
