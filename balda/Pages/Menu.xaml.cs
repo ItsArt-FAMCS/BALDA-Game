@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.IO.IsolatedStorage;
+using System.IO;
 
 namespace Balda
 {
@@ -18,6 +20,22 @@ namespace Balda
             NewGameButton.Click += NewGame;
             SettingsButton.Click += Settings;
             NewTwoPlayersGame.Click += NewPlayerGame;
+            using (var myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (!myIsolatedStorage.FileExists("achfile.txt"))
+                {
+                    using (var stream = myIsolatedStorage.CreateFile("achfile.txt"))
+                    {
+                        using (var isoStream = new StreamWriter(stream))
+                        {
+                            isoStream.WriteLine("000000");
+                       }
+                    }
+                }
+                
+
+
+            }
         }
 
         void NewGame(object sender, RoutedEventArgs e)

@@ -193,7 +193,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Achievs\achfile.txt" />
     <Content Include="Achievs\Achievements.txt" />
     <Content Include="gfx\ApplicationIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

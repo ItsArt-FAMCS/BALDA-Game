@@ -75,7 +75,7 @@ namespace Balda
             }
             if (newAch)
             {
-                Balda.GameLogic.Instance.WriteToFile("Achievs/achfile.txt", st.ToString());
+                Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
                 OnChanged(args);
                 newAch = false;
             }
@@ -86,7 +86,7 @@ namespace Balda
             AchEventArgs args = new AchEventArgs();
             if (word.Length >= 5 && !fletters)
             {
-                args.ach.Add("\"Я умею писать\"");
+                args.ach.Add("\"Что-то знаете\"");
                 fletters = true;
                 st[0] = '1';
                 newAch = true;
@@ -109,7 +109,7 @@ namespace Balda
             }
             if (newAch)
             {
-                Balda.GameLogic.Instance.WriteToFile("Achievs/achfile.txt", st.ToString());
+                Balda.GameLogic.Instance.WriteToFile("achfile.txt", st.ToString());
                 OnChanged(args);
                 newAch = false;
             }
