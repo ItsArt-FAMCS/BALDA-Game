@@ -155,19 +155,31 @@ namespace Balda.Processor
             var result = new List<Field>();
             if (field.X != 0 && Desk[field.X - 1, field.Y].Value != ' ' && Desk[field.X - 1, field.Y].Step == null)
             {
-                result.Add(Desk[field.X - 1, field.Y]);
+                result.Add(new Field(field.X - 1, field.Y)
+                    {
+                        Value = Desk[field.X - 1, field.Y].Value
+                    });
             }
             if (field.Y != 0 && Desk[field.X, field.Y - 1].Value != ' ' && Desk[field.X, field.Y - 1].Step == null)
             {
-                result.Add(Desk[field.X, field.Y - 1]);
+                result.Add(new Field(field.X, field.Y - 1)
+                    {
+                        Value = Desk[field.X, field.Y - 1].Value
+                    });
             }
             if (field.X != BaldaProcessor.Size - 1 && Desk[field.X + 1, field.Y].Value != ' ' && Desk[field.X + 1, field.Y].Step == null)
             {
-                result.Add(Desk[field.X + 1, field.Y]);
+                result.Add(new Field(field.X + 1, field.Y)
+                    {
+                        Value = Desk[field.X + 1, field.Y].Value
+                    });
             }
             if (field.Y != BaldaProcessor.Size - 1 && Desk[field.X, field.Y + 1].Value != ' ' && Desk[field.X, field.Y + 1].Step == null)
             {
-                result.Add(Desk[field.X, field.Y + 1]);
+                result.Add(new Field(field.X, field.Y + 1)
+                    {
+                        Value = Desk[field.X, field.Y + 1].Value
+                    });
             }
             return result;
         }

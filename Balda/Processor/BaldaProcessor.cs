@@ -212,7 +212,6 @@ namespace Balda.Processor
             word = word.ToLower().Trim().Replace('ё', 'е');
             if (IsLegalWord(word))
             {
-                field.Step = null;
                 Desk[field.X, field.Y] = field;
                 Used.Add(word);
                 MembersPoints += word.Length;
