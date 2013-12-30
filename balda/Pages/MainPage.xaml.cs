@@ -118,6 +118,13 @@ namespace Balda
                 if (result == MessageBoxResult.OK)
                 {
                     NewGame();
+                    cells = CreateGrid();
+                    letterPicked = false;
+                    word = "";
+                    if(AIfields != null)
+                        AIfields.Clear();
+                    started = false; //rename
+                    previousCell = null;
                 }
             }
             else
