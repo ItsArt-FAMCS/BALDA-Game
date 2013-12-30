@@ -60,6 +60,7 @@ namespace Balda
         public MainPage()
         {
                 InitializeComponent();
+                this.SupportedOrientations = SupportedPageOrientation.Portrait;
                 gameTimer = new DispatcherTimer();
                 gameTimer.Interval = TimeSpan.FromSeconds(1);
                 gameTimer.Tick += StatusTimerTick;
