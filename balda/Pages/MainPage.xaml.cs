@@ -312,7 +312,7 @@ namespace Balda
             }
             else
             {
-                if (cell.Value == ' ' || cell == newLetter)
+                if (cell.Value == ' ' /*|| cell == newLetter*/)
                 {
                     if (newCompLetter != null)
                     {
