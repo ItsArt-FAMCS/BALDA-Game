@@ -38,14 +38,14 @@
     </UserControl.Resources>
 
     <!--LayoutRoot is the root grid where all the content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Red" Width="50" Height="50">
+    <Grid x:Name="LayoutRoot" Opacity="0.7" Background="Red" Width="50" Height="50">
         
         <!-- The cell contains only two elements; background image and a
         textblock. The grid's background is red so that animation change 
         BackgroundImage opacity when the cell is selected and when blinking 
         the cells (invalid move and game over situations) -->
 
-        <Image Name="BackgroundImage" Source="gfx/darkGridItem.png" />
+        <Image Name="BackgroundImage" Source="\gfx\darkGridItem.png" />
         <TextBlock Height="40" HorizontalAlignment="Center" Margin="0"
                    Name="textValue" VerticalAlignment="Center"
                    FontSize="28" Width="50" Foreground="Black" FontWeight="Bold"

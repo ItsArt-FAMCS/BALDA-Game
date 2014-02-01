@@ -21,15 +21,20 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="Настройки" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
+        <StackPanel Grid.Row="0" Margin="12,17,0,28"/>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button x:Name="Difficulty" Content="Нормально" HorizontalAlignment="Left" Height="146" Margin="19,48,0,0" VerticalAlignment="Top" Width="413" Click="Difficulty_Click"/>
-            <Button x:Name="BoardSize" Content="Поле 7х7" HorizontalAlignment="Left" Height="146" Margin="19,235,0,0" VerticalAlignment="Top" Width="413" Click="BoardSize_Click"/>
-            <TextBlock HorizontalAlignment="Left" Height="33" Margin="37,15,0,0" TextWrapping="Wrap" Text="Сложность" VerticalAlignment="Top" Width="247"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="272*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="159*"/>
+            </Grid.ColumnDefinitions>
+            <Image HorizontalAlignment="Left" Height="802" Margin="-15,-79,-14,0" VerticalAlignment="Top" Width="485" Source="/balda;component/gfx/Background.png" Stretch="Fill" Grid.ColumnSpan="3"/>
+            <Button x:Name="Difficulty" Content="Нормально" HorizontalAlignment="Left" Height="146" Margin="0,192,0,0" VerticalAlignment="Top" Width="413" Click="Difficulty_Click" Grid.ColumnSpan="3" Foreground="Black" BorderBrush="Black"/>
+            <Button x:Name="BoardSize" Content="Поле 7х7" HorizontalAlignment="Left" Height="146" Margin="0,396,0,0" VerticalAlignment="Top" Width="413" Click="BoardSize_Click" Grid.ColumnSpan="3" BorderBrush="Black" Foreground="Black"/>
+            <TextBlock HorizontalAlignment="Left" Height="45" Margin="15,164,0,0" TextWrapping="Wrap" Text="Сложность" VerticalAlignment="Top" Width="257" Foreground="Black"/>
+            <TextBlock Text="Настройки" Margin="11,24,-14,603" Style="{StaticResource PhoneTextTitle1Style}" Grid.ColumnSpan="3" Foreground="Black"/>
         </Grid>
     </Grid>
 

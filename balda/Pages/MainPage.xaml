@@ -27,7 +27,7 @@
         <Image Source="/gfx/Background.png" Stretch="Fill" Height="728" VerticalAlignment="Top" />
         <!--LayoutRoot is the root grid where all page content is placed-->
         <Grid x:Name="LayoutRoot">
-        <!-- Use 3 rows and 2 columns. This makes it is easy to reposition 
+            <!-- Use 3 rows and 2 columns. This makes it is easy to reposition 
         the UI elements by manipulating the rows and columns when orientation
         changes. -->
             <Grid.RowDefinitions>
@@ -52,7 +52,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    
+
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -62,49 +62,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    
+
                 </Grid.ColumnDefinitions>
             </Grid>
 
             <!-- Stats; player move counter, empty cells and game time -->
-            <Grid x:Name="Statistics" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Height="64">
-
-                <!-- 5x8 grid for icons and text. Five rows are needed for the landscape
-            mode where the stats are stacked vertically, and eight columns for the
-            portrait mode -->
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="0"/>
-                    <RowDefinition Height="0"/>
-                    <RowDefinition Height="0"/>
-                    <RowDefinition Height="0"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="18"></ColumnDefinition>
-                    <ColumnDefinition Width="60*"></ColumnDefinition>
-                    <ColumnDefinition Width="75*"></ColumnDefinition>
-                    <ColumnDefinition Width="60*"></ColumnDefinition>
-                    <ColumnDefinition Width="75*"></ColumnDefinition>
-                    <ColumnDefinition Width="60*"></ColumnDefinition>
-                    <ColumnDefinition Width="90*"></ColumnDefinition>
-                    <ColumnDefinition Width="18"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <!-- Background for the stats. -->
-                <Image Source="/gfx/statistic.png" Grid.ColumnSpan="8" Grid.RowSpan="5" Stretch="Fill" />
-
-                <!-- Player move counter icon and text -->
-                <Image Grid.Column="1" Margin="6" Name="MovesImage" Source="/gfx/move.png" />
-                <TextBlock Grid.Column="2" Name="Moves" Text="0" Foreground="Black" Margin="5,0,0,0" FontSize="26" VerticalAlignment="Center" />
-
-                <!-- Empty cells icon and text -->
-                <Image Grid.Column="3" Margin="6" Name="EmptyImage"  Source="/gfx/empty.png" />
-                <TextBlock Grid.Column="4" Name="Empty" Text="0" Foreground="Black" Margin="5,0,0,0" FontSize="26" VerticalAlignment="Center" />
-
-                <!-- Game time icon and text -->
-                <Image Grid.Column="5" Margin="6" Name="GameTimeImage" Source="/gfx/time.png" />
-                <TextBlock Grid.Column="6" Name="GameTime" Text="0:00:00" Foreground="Black" Margin="5,0,0,0" FontSize="26" VerticalAlignment="Center"  />
-            </Grid>
 
             <!-- Selection keyboard; placed at the bottom of the grid definition to show up topmost -->
             <local:NumberSelection x:Name="numberSelection" Grid.ColumnSpan="2" Grid.RowSpan="3" Visibility="Collapsed" />
@@ -113,8 +75,8 @@
             <local:WaitNote x:Name="waitIndicator" Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed"/>
             <TextBlock x:Name="compScore" HorizontalAlignment="Left" Height="75" Margin="335,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Grid.Column="1" Grid.RowSpan="2" FontSize="36" Foreground="#FFF70B0B"/>
         </Grid>
-        <TextBox x:Name="playerTextBox" HorizontalAlignment="Left" Height="73" Margin="24,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169"/>
-        <TextBox x:Name="computerTextBOx" HorizontalAlignment="Left" Height="73" Margin="272,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198"/>
+        <TextBox x:Name="playerTextBox" Opacity="0.7" HorizontalAlignment="Left" Height="73" Margin="20,621,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
+        <TextBox x:Name="computerTextBOx" Opacity="0.7" HorizontalAlignment="Left" Height="73" Margin="261,621,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" RenderTransformOrigin="0.14,0.521"/>
         <TextBlock x:Name="playerScore" HorizontalAlignment="Left" Height="75" Margin="56,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" FontSize="36" Foreground="#FF06B917"/>
     </Grid>
 
@@ -122,7 +84,6 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False" Opacity="0.4">
             <shell:ApplicationBarIconButton IconUri="/gfx/newgame.png" Text="New Game"  Click="NewGameButton_Click" />
-            <shell:ApplicationBarIconButton IconUri="/gfx/highscores.png" Text="Highscores" Click="HighscoresButton_Click" />
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

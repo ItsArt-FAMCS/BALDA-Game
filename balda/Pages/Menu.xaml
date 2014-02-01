@@ -25,12 +25,14 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <Button x:Name="NewGameButton" Content="Играть против компьютера" HorizontalAlignment="Left" Margin="0,69,0,0" VerticalAlignment="Top" Width="436" Height="153"/>
-            <Button x:Name="SettingsButton" Content="Настройки" HorizontalAlignment="Left" Height="147" Margin="0,373,0,0" VerticalAlignment="Top" Width="436"/>
             <Button x:Name="ResumeGameButton" Content="Продолжить игру" HorizontalAlignment="Left" Height="71" Margin="100,26,0,0" VerticalAlignment="Top" Width="254" Visibility="Collapsed"/>
-            <Button x:Name="NewTwoPlayersGame" Content="Играть с другом" HorizontalAlignment="Left" Height="146" Margin="0,227,0,0" VerticalAlignment="Top" Width="436"/>
 
         </Grid>
+        <Image HorizontalAlignment="Left" Height="801" VerticalAlignment="Top" Width="480" Stretch="Fill" Source="/balda;component/gfx/Background.png" Grid.RowSpan="2" Margin="0,-33,0,0"/>
+        <Button x:Name="NewGameButton" Content="Играть против компьютера" HorizontalAlignment="Left" Margin="10,162,0,0" VerticalAlignment="Top" Width="456" Height="153" Grid.Row="1" BorderBrush="Black" Foreground="Black"/>
+        <Button x:Name="NewTwoPlayersGame" Content="Играть с другом" HorizontalAlignment="Left" Height="146" Margin="10,341,0,0" VerticalAlignment="Top" Width="456" Grid.Row="1" Foreground="Black" BorderBrush="Black"/>
+        <Button x:Name="SettingsButton" Content="Настройки" HorizontalAlignment="Left" Height="147" Margin="12,512,0,0" VerticalAlignment="Top" Width="456" Grid.Row="1" BorderBrush="Black" Foreground="Black"/>
+        <Image Margin="65,28,45,585" Source="/Image1.png" Stretch="Fill" Grid.Row="1"/>
     </Grid>
 
 </phone:PhoneApplicationPage>

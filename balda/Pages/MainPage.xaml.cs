@@ -205,11 +205,11 @@ namespace Balda
                 achShowedTime = DateTime.Now;
                 achListner.achQueue.RemoveAt(0);
             }
-            GameTime.Text  = String.Format("{0:D1}:{1:D2}:{2:D2}",
-                gameTimeElapsed.Hours, gameTimeElapsed.Minutes, gameTimeElapsed.Seconds);
+            //GameTime.Text  = String.Format("{0:D1}:{1:D2}:{2:D2}",
+            //    gameTimeElapsed.Hours, gameTimeElapsed.Minutes, gameTimeElapsed.Seconds);
 
-            Empty.Text = GameLogic.Instance.EmptyCells.ToString();
-            Moves.Text = GameLogic.Instance.PlayerMoves.ToString();
+            //Empty.Text = GameLogic.Instance.EmptyCells.ToString();
+            //Moves.Text = GameLogic.Instance.PlayerMoves.ToString();
 
         }
 

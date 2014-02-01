@@ -40,20 +40,21 @@ namespace Balda
             //    FrameworkDispatcher.Update();
             //    effect.Play();
             //}
-            FrameworkDispatcher.Update();
-            switch (type)
-            {
-                case SoundType.CellSelectedSound:
-                    cellSelectedEffect.Play();
-                    break;
-                case SoundType.GameEndSound:
-                    gameEndEffect.Play();
-                    break;
-                case SoundType.NumberChosenSound:
-                    numberChosenEffect.Play();
-                    break;
+
+            //FrameworkDispatcher.Update();
+            //switch (type)
+            //{
+            //    case SoundType.CellSelectedSound:
+            //        cellSelectedEffect.Play();
+            //        break;
+            //    case SoundType.GameEndSound:
+            //        gameEndEffect.Play();
+            //        break;
+            //    case SoundType.NumberChosenSound:
+            //        numberChosenEffect.Play();
+            //        break;
                     
-            }
+            //}
 		}
 	}
 }
