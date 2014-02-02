@@ -17,10 +17,10 @@ namespace Balda
     /// </summary>
     public class GameLogic
     {
-		public BoardModel Model { get; private set; }
+        public BoardModel Model { get; private set; }
         private Processor.BaldaProcessor bProc = Processor.BaldaProcessor.Instance;
         public const int WordLength = 7;
-		public const int BlocksPerSide = 3;
+        public const int BlocksPerSide = 3;
         public Processor.DifficultyLevel dificulty = Processor.DifficultyLevel.Addaptive; //normal diff by default
         public int size = 7;
         public bool compOponent = true;
@@ -31,6 +31,8 @@ namespace Balda
         public int EmptyCells { get; set; }
         public int PlayerMoves { get; set; }
         public string achs;
+        public bool isGameOngoing = false;
+        public MainPage mainPage;
         private static readonly GameLogic _instance = new GameLogic();
         public static GameLogic Instance
         {
@@ -38,8 +40,8 @@ namespace Balda
         }
         protected GameLogic()
         {
-            
-			Model = new BoardModel(size, size);
+
+            Model = new BoardModel(size, size);
             achs = ReadFile("achfile.txt");
         }
 
@@ -50,12 +52,12 @@ namespace Balda
             {
                 if (myIsolatedStorage.FileExists(filePath))
                     myIsolatedStorage.DeleteFile(filePath);
-                using( var stream = myIsolatedStorage.CreateFile(filePath))
+                using (var stream = myIsolatedStorage.CreateFile(filePath))
                 {
-                using (var isoStream = new StreamWriter(stream))
-                {
-                    isoStream.WriteLine(text);
-                }
+                    using (var isoStream = new StreamWriter(stream))
+                    {
+                        isoStream.WriteLine(text);
+                    }
                 }
             }
         }
@@ -63,8 +65,8 @@ namespace Balda
         private string ReadFile(string filePath)
         {
             //this verse is loaded for the first time so fill it from the text file
-            
-           
+
+
 
             using (var myIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -90,9 +92,9 @@ namespace Balda
         {
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
-					Model.BoardNumbers[i][j].Value = ' ';
+                    Model.BoardNumbers[i][j].Value = ' ';
             string word = Processor.BaldaProcessor.Instance.InitializeGame(dificulty, size);
-            
+
             for (int i = 0; i < size; i++)
             {
                 Model.BoardNumbers[size / 2][i].Value = word[i];

@@ -41,7 +41,7 @@ namespace Balda
         private DateTime gameStartTime;
         private DateTime gamePausedTime;
         private TimeSpan gameTimeElapsed;
-		private Cell[][] cells;
+        private Cell[][] cells;
         private int pScore = 0;
         private int cScore = 0;
         private bool secondPlayer = false;
@@ -59,23 +59,59 @@ namespace Balda
         /// 
         public MainPage()
         {
-                InitializeComponent();
-                this.SupportedOrientations = SupportedPageOrientation.Portrait;
-                gameTimer = new DispatcherTimer();
-                gameTimer.Interval = TimeSpan.FromSeconds(1);
-                gameTimer.Tick += StatusTimerTick;
-                achProc = new Balda.AchievementsProcessor();
-                achListner = new Balda.AchievementsListner(achProc);
-                gamePausedTime = new DateTime();
-                
-                cells = CreateGrid();
-                // For tombstoning; listen for deactivated event and restore state
-                // if the application was deactivated earlier.
-                PhoneApplicationService.Current.Deactivated += new EventHandler<DeactivatedEventArgs>(App_Deactivated);
-                RestoreState();
-                NewGame();
-          //  });
-            
+            InitializeComponent();
+
+            this.SupportedOrientations = SupportedPageOrientation.Portrait;
+            gameTimer = new DispatcherTimer();
+            gameTimer.Interval = TimeSpan.FromSeconds(1);
+            gameTimer.Tick += StatusTimerTick;
+            achProc = new Balda.AchievementsProcessor();
+            achListner = new Balda.AchievementsListner(achProc);
+            gamePausedTime = new DateTime();
+
+            cells = CreateGrid();
+            // For tombstoning; listen for deactivated event and restore state
+            // if the application was deactivated earlier.
+            PhoneApplicationService.Current.Deactivated += new EventHandler<DeactivatedEventArgs>(App_Deactivated);
+            RestoreState();
+            NewGame();
+            if (GameLogic.Instance.isGameOngoing)
+            {
+                this.cells = GameLogic.Instance.mainPage.cells;
+                for (int i = 0; i < GameLogic.Instance.size; i++)
+                    for (int j = 0; j < GameLogic.Instance.size; j++)
+                        cells[i][j].Value = GameLogic.Instance.mainPage.cells[i][j].Value;
+                // 
+                this.word = GameLogic.Instance.mainPage.word;
+                this.usedWords = GameLogic.Instance.mainPage.usedWords;
+                this.started = GameLogic.Instance.mainPage.started;
+                this.secondPlayer = GameLogic.Instance.mainPage.secondPlayer;
+                this.pScore = GameLogic.Instance.mainPage.pScore;
+                this.previousCell = GameLogic.Instance.mainPage.previousCell;
+                this.playerTextBox.Text = GameLogic.Instance.mainPage.playerTextBox.Text;
+                this.playerScore.Text = GameLogic.Instance.mainPage.playerScore.Text;
+                //this.numberSelection = GameLogic.Instance.mainPage.numberSelection;
+                this.newLetter = GameLogic.Instance.mainPage.newLetter;
+                this.newCompLetter = GameLogic.Instance.mainPage.newCompLetter;
+                this.listOfCoords = GameLogic.Instance.mainPage.listOfCoords;
+                this.letterPicked = false;
+
+                this.cScore = GameLogic.Instance.mainPage.cScore;
+                this.containsNewLetter = GameLogic.Instance.mainPage.containsNewLetter;
+                this.computerTextBOx.Text = GameLogic.Instance.mainPage.computerTextBOx.Text;
+                this.compScore.Text = GameLogic.Instance.mainPage.compScore.Text;
+                this.bProc = GameLogic.Instance.mainPage.bProc;
+                this.BoardGrid = GameLogic.Instance.mainPage.BoardGrid;
+                this.AIfields = GameLogic.Instance.mainPage.AIfields;
+
+                // this.UpdateLayout();
+                //UpdateStatus();
+            }
+
+
+
+            //  });
+
         }
 
         /// <summary>
@@ -85,10 +121,10 @@ namespace Balda
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             if (gameState == GameState.Ongoing && gamePausedTime > gameStartTime)
-           {
+            {
                 gameStartTime += DateTime.Now - gamePausedTime;
                 UpdateStatus();
-            }           
+            }
         }
 
         /// <summary>
@@ -122,7 +158,7 @@ namespace Balda
                     cells = CreateGrid();
                     letterPicked = false;
                     word = "";
-                    if(AIfields != null)
+                    if (AIfields != null)
                         AIfields.Clear();
                     started = false; //rename
                     previousCell = null;
@@ -148,35 +184,35 @@ namespace Balda
         /// </summary>
         private void NewGame()
         {
-           // Deployment.Current.Dispatcher.BeginInvoke(() =>
-           // {
-                // Close the GameOver dialog if it was still active
-                GameOver gameOver = LayoutRoot.Children.OfType<GameOver>().SingleOrDefault();
-                LayoutRoot.Children.Remove(gameOver);
+            // Deployment.Current.Dispatcher.BeginInvoke(() =>
+            // {
+            // Close the GameOver dialog if it was still active
+            GameOver gameOver = LayoutRoot.Children.OfType<GameOver>().SingleOrDefault();
+            LayoutRoot.Children.Remove(gameOver);
 
-                numberSelection.Visibility = System.Windows.Visibility.Collapsed;
+            numberSelection.Visibility = System.Windows.Visibility.Collapsed;
 
-                // Display wait note (spinning circle)
-                waitIndicator.Visibility = System.Windows.Visibility.Visible;
-                waitIndicator.StartSpin();
+            // Display wait note (spinning circle)
+            waitIndicator.Visibility = System.Windows.Visibility.Visible;
+            waitIndicator.StartSpin();
 
-                // Disable databinding while generating puzzle
-                DataContext = null;
+            // Disable databinding while generating puzzle
+            DataContext = null;
 
-                // Puzzle generation takes couple of seconds, do it in another thread
-                ThreadPool.QueueUserWorkItem(dummy => Deployment.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        GameLogic.Instance.GeneratePuzzle(word);
-                        DataContext = GameLogic.Instance.Model; // let's turn on databinding again
-                        gameTimer.Start();
-                        gameStartTime = DateTime.Now;
-                        gameState = GameState.Ongoing;
-                        UpdateStatus();
-                        waitIndicator.Visibility = System.Windows.Visibility.Collapsed;
-                        waitIndicator.StopSpin();
-                    }));
+            // Puzzle generation takes couple of seconds, do it in another thread
+            ThreadPool.QueueUserWorkItem(dummy => Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                if (!GameLogic.Instance.isGameOngoing) GameLogic.Instance.GeneratePuzzle(word);
+                DataContext = GameLogic.Instance.Model; // let's turn on databinding again
+                gameTimer.Start();
+                gameStartTime = DateTime.Now;
+                gameState = GameState.Ongoing;
+                UpdateStatus();
+                waitIndicator.Visibility = System.Windows.Visibility.Collapsed;
+                waitIndicator.StopSpin();
+            }));
             //});
-            
+
         }
 
         /// <summary>
@@ -228,22 +264,22 @@ namespace Balda
                 gameTimeElapsed.Minutes, gameTimeElapsed.Seconds, 0);
             score.player1 = pScore;
             score.player2 = cScore;
-			//TODO: move this to XAML
+            //TODO: move this to XAML
             var gameOver = new GameOver(score);
             // Main page is divided into 2x3 grid. Make sure the row and column
             // properties are set properly (position 0,0 with span 2,3) to make
             // the dialog visible anywhere on the page.
-            
+
             gameOver.SetValue(Grid.RowSpanProperty, 3);
             gameOver.SetValue(Grid.ColumnSpanProperty, 2);
             gameOver.SetValue(Grid.VerticalAlignmentProperty, VerticalAlignment.Center);
             gameOver.SetValue(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Center);
             gameOver.SetValue(MarginProperty, new Thickness(10, 0, 0, 0));
-
+            GameLogic.Instance.isGameOngoing = false;
             LayoutRoot.Children.Add(gameOver);
             gameState = GameState.GameOver;
-            
-			SoundHelper.PlaySound(SoundHelper.SoundType.GameEndSound);
+
+            SoundHelper.PlaySound(SoundHelper.SoundType.GameEndSound);
         }
 
         /// <summary>
@@ -253,59 +289,60 @@ namespace Balda
         /// 
         private BitmapImage darkImage = new BitmapImage(new Uri("/gfx/darkGridItem.png", UriKind.Relative));
         private BitmapImage lightImage = new BitmapImage(new Uri("/gfx/lightGridItem.png", UriKind.Relative));
-		private Cell[][] CreateGrid()
-		{
-            
-			bool lightCell = false;
+        private Cell[][] CreateGrid()
+        {
+
+            bool lightCell = false;
             int size = GameLogic.Instance.size;
-			var cells = new Cell[size][];
+            var cells = new Cell[size][];
             listOfCoords = new List<Cell>();
             for (int row = 0; row < size; row++)
-			{
+            {
                 cells[row] = new Cell[size];
                 if (row % size != 0)
-					lightCell = !lightCell;
+                    lightCell = !lightCell;
 
                 for (int col = 0; col < size; col++)
-				{
+                {
                     // switch image type (light or dark) after each 3 cells in row
                     if (col % size == 0)
-						lightCell = !lightCell;
+                        lightCell = !lightCell;
 
-					Cell c = new Cell();
-					c.SetValue(Grid.RowProperty, row);
-					c.SetValue(Grid.ColumnProperty, col);
-					c.BackgroundImage.Source = lightCell ? lightImage : darkImage;
-                    
+                    Cell c = new Cell();
+                    c.SetValue(Grid.RowProperty, row);
+                    c.SetValue(Grid.ColumnProperty, col);
+                    c.BackgroundImage.Source = lightCell ? lightImage : darkImage;
+
                     // install event handler
-					c.MouseLeftButtonDown += new MouseButtonEventHandler(OnCellTouched);
+                    c.MouseLeftButtonDown += new MouseButtonEventHandler(OnCellTouched);
                     c.MouseEnter += new MouseEventHandler(OnCellEnter);
                     c.ManipulationCompleted += new EventHandler<ManipulationCompletedEventArgs>(OnCellLost);
                     // set binding to proper BoardValue from BoardViewModel
-					var b = new Binding(string.Format("BoardNumbers[{0}][{1}].Value", row, col));
-					c.SetBinding(Cell.ValueProperty, b);
+                    var b = new Binding(string.Format("BoardNumbers[{0}][{1}].Value", row, col));
+                    c.SetBinding(Cell.ValueProperty, b);
 
-					var b2 = new Binding(string.Format("BoardNumbers[{0}][{1}].SetByGame", row, col)); 
-					c.SetBinding(Cell.SetByGameProperty, b2);
+                    var b2 = new Binding(string.Format("BoardNumbers[{0}][{1}].SetByGame", row, col));
+                    c.SetBinding(Cell.SetByGameProperty, b2);
 
-					cells[row][col] = c;
-					BoardGrid.Children.Add(c);
-				}
-			}
+                    cells[row][col] = c;
 
-			return cells;
-		}
+                    BoardGrid.Children.Add(c);
+                }
+            }
+
+            return cells;
+        }
 
         private bool letterPicked = false;
         private string word = "";
         private Cell newLetter;
         private List<Processor.Field> AIfields;
 
-		private void OnCellTouched(object sender, MouseButtonEventArgs e)
-		{
-			Cell cell = sender as Cell;
-			if (!cell.IsPlayerSettable)
-				return;
+        private void OnCellTouched(object sender, MouseButtonEventArgs e)
+        {
+            Cell cell = sender as Cell;
+            if (!cell.IsPlayerSettable)
+                return;
             if (letterPicked)
             {
                 //do nothing
@@ -334,7 +371,7 @@ namespace Balda
                     letterPicked = true;
                 }
             }
-		}
+        }
 
         private bool started = false; //rename
         private Cell previousCell;
@@ -380,9 +417,9 @@ namespace Balda
                     listOfCoords.Add(cell);
                     previousCell = cell;
                 }
-                
+
             }
-            
+
         }
         private Cell newCompLetter;
 
@@ -392,8 +429,8 @@ namespace Balda
             {
                 string finalWord = word;
                 word = "";
-                
-                
+
+
 
                 if (bProc.IsLegalWord(finalWord) && containsNewLetter)
                 {
@@ -427,11 +464,11 @@ namespace Balda
                     if (bProc.IsGameOver())
                         GameEnds();
                     bProc.AddWord(finalWord, new Processor.Field((int)newLetter.GetValue(Grid.RowProperty), (int)newLetter.GetValue(Grid.ColumnProperty))
-                            {
-                                Value = newLetter.Value
-                            });
-                    
-                        
+                    {
+                        Value = newLetter.Value
+                    });
+
+
                     foreach (var x in listOfCoords)
                     {
                         x.BackgroundImage.Source = lightImage;
@@ -442,7 +479,7 @@ namespace Balda
                         AIMove();
                     if (bProc.IsGameOver())
                         GameEnds();
-                    
+
                 }
                 else
                 {
@@ -455,7 +492,7 @@ namespace Balda
                                                           ' ');
                     foreach (var x in listOfCoords)
                     {
-                        
+
                         x.BackgroundImage.Source = lightImage;
                     }
                 }
@@ -474,6 +511,7 @@ namespace Balda
             compScore.Text = cScore.ToString();
             cells[field.X][field.Y].Value = field.Value;
             newCompLetter = cells[field.X][field.Y];
+            GameLogic.Instance.Model.BoardNumbers[field.X][field.Y].Value = field.Value;
             AIfields = way.GetFields();
             foreach (var x in AIfields)
             {
@@ -483,44 +521,52 @@ namespace Balda
             containsNewLetter = false;
         }
 
-		/// <summary>
-		/// Helper method to get the absolute position with respect to the screen borders
-		/// </summary>
-		private Thickness GetPositionForCell(Cell cell)
-		{
-			var pos = new Point(cell.ActualWidth / 2 - numberSelection.KeyboardSize.Width / 2, cell.ActualHeight / 2 - numberSelection.KeyboardSize.Height / 2);
-			pos = cell.TransformToVisual(LayoutRoot).Transform(pos);
+        /// <summary>
+        /// Helper method to get the absolute position with respect to the screen borders
+        /// </summary>
+        private Thickness GetPositionForCell(Cell cell)
+        {
+            var pos = new Point(cell.ActualWidth / 2 - numberSelection.KeyboardSize.Width / 2, cell.ActualHeight / 2 - numberSelection.KeyboardSize.Height / 2);
+            pos = cell.TransformToVisual(LayoutRoot).Transform(pos);
 
-			if (pos.X < 0)
-				pos.X = 0;
-			else if (pos.X > LayoutRoot.ActualWidth - numberSelection.KeyboardSize.Width)
-				pos.X = LayoutRoot.ActualWidth - numberSelection.KeyboardSize.Width;
+            if (pos.X < 0)
+                pos.X = 0;
+            else if (pos.X > LayoutRoot.ActualWidth - numberSelection.KeyboardSize.Width)
+                pos.X = LayoutRoot.ActualWidth - numberSelection.KeyboardSize.Width;
 
-			if (pos.Y < 0)
-				pos.Y = 0;
-			else if (pos.Y > LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height)
-				pos.Y = LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height;
+            if (pos.Y < 0)
+                pos.Y = 0;
+            else if (pos.Y > LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height)
+                pos.Y = LayoutRoot.ActualHeight - numberSelection.KeyboardSize.Height;
 
-			return new Thickness(20, 100, 0, 0);
-		}
+            return new Thickness(20, 100, 0, 0);
+        }
 
-		/// <summary>
-		/// Action triggered when user selected a number
-		/// </summary>
-		private void OnNumberChoosen(Cell sender, char number)
-		{
+        /// <summary>
+        /// Action triggered when user selected a number
+        /// </summary>
+        private void OnNumberChoosen(Cell sender, char number)
+        {
             int x = (int)sender.GetValue(Grid.RowProperty);
             int y = (int)sender.GetValue(Grid.ColumnProperty);
             GameLogic.Instance.SetNumberByPlayer((int)sender.GetValue(Grid.RowProperty), (int)sender.GetValue(Grid.ColumnProperty), number);
             cells[x][y].Blink();
-		    SoundHelper.PlaySound(SoundHelper.SoundType.CellSelectedSound);
-		}
+            SoundHelper.PlaySound(SoundHelper.SoundType.CellSelectedSound);
+        }
 
         void App_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            
+
         }
 
+
+        //back button 
+
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+            GameLogic.Instance.isGameOngoing = true;
+            GameLogic.Instance.mainPage = this;
+        }
         /// <summary>
         /// Reads the game state from a file and continues the game from where
         /// it was left.
@@ -531,21 +577,21 @@ namespace Balda
             if (!store.FileExists(gameStateFile))
                 return;
 
-			int emptyCells = 0;
-			using (IsolatedStorageFileStream stream = store.OpenFile(gameStateFile, FileMode.Open))
-			{
-				using (var reader = new BinaryReader(stream))
-				{
-					// Read the state and stats
-					gameState = (GameState)reader.ReadInt32();
+            int emptyCells = 0;
+            using (IsolatedStorageFileStream stream = store.OpenFile(gameStateFile, FileMode.Open))
+            {
+                using (var reader = new BinaryReader(stream))
+                {
+                    // Read the state and stats
+                    gameState = (GameState)reader.ReadInt32();
                     GameLogic.Instance.PlayerMoves = reader.ReadInt32();
-					gameTimeElapsed = new TimeSpan(reader.ReadInt64());
-					gameStartTime = DateTime.Now - gameTimeElapsed;
+                    gameTimeElapsed = new TimeSpan(reader.ReadInt64());
+                    gameStartTime = DateTime.Now - gameTimeElapsed;
 
-					// Read contents of the cells
-					
-				}
-			}
+                    // Read contents of the cells
+
+                }
+            }
 
             store.DeleteFile(gameStateFile);
 
@@ -559,7 +605,7 @@ namespace Balda
                 GameLogic.Instance.EmptyCells = 0;
             }
 
-			DataContext = GameLogic.Instance.Model;
+            DataContext = GameLogic.Instance.Model;
             UpdateStatus();
         }
 
@@ -672,7 +718,7 @@ namespace Balda
         //        Statistics.RowDefinitions[0].Height = new GridLength(100, GridUnitType.Star);
 
         //        Statistics.Height = 64;
-                
+
         //        MovesImage.SetValue(Grid.ColumnProperty, 1);
         //        MovesImage.SetValue(Grid.RowProperty, 0);
 
